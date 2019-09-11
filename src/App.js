@@ -15,8 +15,8 @@ function App() {
       let data = await getPage(pageNum)
       let body$ = data.body
 
-      let values = await body$.getReader().read()
-      let blob = new Blob([ values.value ], { type: 'text/html' })
+      let readings = await body$.getReader().read()
+      let blob = new Blob([ readings.value ], { type: 'text/html' })
       let reader = new FileReader()
 
       reader.addEventListener('loadend', (e) => {
@@ -51,21 +51,37 @@ function App() {
 
       // If no error was found - parse html and construct object
       const tRows = $('#AutoNumber2').find('tbody')
-  
-      let data = [
-        { jobTitle: String($(tRows.find('tr')[0]).text()).trim(), jobData: String($(tRows.find('tr')[1]).text()), jobUrl: `http://tecnojobs.pt${$(tRows).find('a')[0].attribs.href}` },
-        { jobTitle: String($(tRows.find('tr')[2]).text()).trim(), jobData: String($(tRows.find('tr')[3]).text()), jobUrl: `http://tecnojobs.pt${$(tRows).find('a')[1].attribs.href}` },
-        { jobTitle: String($(tRows.find('tr')[4]).text()).trim(), jobData: String($(tRows.find('tr')[5]).text()), jobUrl: `http://tecnojobs.pt${$(tRows).find('a')[2].attribs.href}` },
-        { jobTitle: String($(tRows.find('tr')[6]).text()).trim(), jobData: String($(tRows.find('tr')[7]).text()), jobUrl: `http://tecnojobs.pt${$(tRows).find('a')[3].attribs.href}` },
-        { jobTitle: String($(tRows.find('tr')[8]).text()).trim(), jobData: String($(tRows.find('tr')[9]).text()), jobUrl: `http://tecnojobs.pt${$(tRows).find('a')[4].attribs.href}` },
-        { jobTitle: String($(tRows.find('tr')[10]).text()).trim(), jobData: String($(tRows.find('tr')[11]).text()), jobUrl: `http://tecnojobs.pt${$(tRows).find('a')[5].attribs.href}` },
-        { jobTitle: String($(tRows.find('tr')[12]).text()).trim(), jobData: String($(tRows.find('tr')[13]).text()), jobUrl: `http://tecnojobs.pt${$(tRows).find('a')[6].attribs.href}` },
-        { jobTitle: String($(tRows.find('tr')[14]).text()).trim(), jobData: String($(tRows.find('tr')[15]).text()), jobUrl: `http://tecnojobs.pt${$(tRows).find('a')[7].attribs.href}` },
-        { jobTitle: String($(tRows.find('tr')[16]).text()).trim(), jobData: String($(tRows.find('tr')[17]).text()), jobUrl: `http://tecnojobs.pt${$(tRows).find('a')[8].attribs.href}` },
-        { jobTitle: String($(tRows.find('tr')[18]).text()).trim(), jobData: String($(tRows.find('tr')[19]).text()), jobUrl: `http://tecnojobs.pt${$(tRows).find('a')[9].attribs.href}` },
-      ]
+      
+      if(
+        $(tRows.find('tr')[0]).text().length > 0 && 
+        $(tRows.find('tr')[1]).text().length > 0 &&
+        $(tRows.find('tr')[2]).text().length > 0 && 
+        $(tRows.find('tr')[3]).text().length > 0 &&
+        $(tRows.find('tr')[4]).text().length > 0 && 
+        $(tRows.find('tr')[5]).text().length > 0 &&
+        $(tRows.find('tr')[6]).text().length > 0 && 
+        $(tRows.find('tr')[7]).text().length > 0 &&
+        $(tRows.find('tr')[8]).text().length > 0 && 
+        $(tRows.find('tr')[9]).text().length > 0
+      ) {
+
+        let data = [
+          { jobTitle: String($(tRows.find('tr')[0]).text()).trim(), jobData: String($(tRows.find('tr')[1]).text()), jobUrl: `http://tecnojobs.pt${$(tRows).find('a')[0] ? $(tRows).find('a')[0].attribs.href : 'http://tecnojobs.pt'}` },
+          { jobTitle: String($(tRows.find('tr')[2]).text()).trim(), jobData: String($(tRows.find('tr')[3]).text()), jobUrl: `http://tecnojobs.pt${$(tRows).find('a')[1] ? $(tRows).find('a')[1].attribs.href : 'http://tecnojobs.pt'}` },
+          { jobTitle: String($(tRows.find('tr')[4]).text()).trim(), jobData: String($(tRows.find('tr')[5]).text()), jobUrl: `http://tecnojobs.pt${$(tRows).find('a')[2] ? $(tRows).find('a')[2].attribs.href : 'http://tecnojobs.pt'}` },
+          { jobTitle: String($(tRows.find('tr')[6]).text()).trim(), jobData: String($(tRows.find('tr')[7]).text()), jobUrl: `http://tecnojobs.pt${$(tRows).find('a')[3] ? $(tRows).find('a')[3].attribs.href : 'http://tecnojobs.pt'}` },
+          { jobTitle: String($(tRows.find('tr')[8]).text()).trim(), jobData: String($(tRows.find('tr')[9]).text()), jobUrl: `http://tecnojobs.pt${$(tRows).find('a')[4] ? $(tRows).find('a')[4].attribs.href : 'http://tecnojobs.pt'}` },
+          { jobTitle: String($(tRows.find('tr')[10]).text()).trim(), jobData: String($(tRows.find('tr')[11]).text()), jobUrl: `http://tecnojobs.pt${$(tRows).find('a')[5] ? $(tRows).find('a')[5].attribs.href : 'http://tecnojobs.pt'}` },
+          { jobTitle: String($(tRows.find('tr')[12]).text()).trim(), jobData: String($(tRows.find('tr')[13]).text()), jobUrl: `http://tecnojobs.pt${$(tRows).find('a')[6] ? $(tRows).find('a')[6].attribs.href : 'http://tecnojobs.pt'}` },
+          { jobTitle: String($(tRows.find('tr')[14]).text()).trim(), jobData: String($(tRows.find('tr')[15]).text()), jobUrl: `http://tecnojobs.pt${$(tRows).find('a')[7] ? $(tRows).find('a')[7].attribs.href : 'http://tecnojobs.pt'}` },
+          { jobTitle: String($(tRows.find('tr')[16]).text()).trim(), jobData: String($(tRows.find('tr')[17]).text()), jobUrl: `http://tecnojobs.pt${$(tRows).find('a')[8] ? $(tRows).find('a')[8].attribs.href : 'http://tecnojobs.pt'}` },
+          { jobTitle: String($(tRows.find('tr')[18]).text()).trim(), jobData: String($(tRows.find('tr')[19]).text()), jobUrl: `http://tecnojobs.pt${$(tRows).find('a')[9] ? $(tRows).find('a')[9].attribs.href : 'http://tecnojobs.pt'}` },
+        ]
+
+        setData(data)
+      
+      }
     
-      setData(data)
       setLoading(false)
 
     }
@@ -79,9 +95,9 @@ function App() {
     try {
   
       if(pageNum === 1 || pageNum === 0) {
-        rawRes = await fetch(`http://localhost:4000`, { method: 'GET', headers: { 'Content-Type': 'text/html' } })
+        rawRes = await fetch(`https://tecnojobs-app.herokuapp.com/api`, { method: 'GET', headers: { 'Content-Type': 'text/html' } })
       } else {
-        rawRes = await fetch(`http://localhost:4000/?page=${pageNum}`, { method: 'GET', headers: { 'Content-Type': 'text/html' } })
+        rawRes = await fetch(`https://tecnojobs-app.herokuapp.com/api?page=${pageNum}`, { method: 'GET', headers: { 'Content-Type': 'text/html' } })
       }
       
       return rawRes
