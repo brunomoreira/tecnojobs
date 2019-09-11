@@ -23,9 +23,9 @@ function App() {
         let blob = new Blob([ readings.value ], { type: 'text/html' })
         let reader = new FileReader()
       
-        reader.addEventListener('loadend', async (e) => {
+        reader.addEventListener('loadend', (e) => {
           
-          let html = await e.srcElement.result
+          let html = e.srcElement.result
   
           // Prepare page
           preparePage(html)
