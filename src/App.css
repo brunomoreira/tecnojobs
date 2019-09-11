@@ -1,0 +1,126 @@
+.App {
+  text-align: center;
+  position: relative;
+}
+
+.App-header {
+  background-color: #282c34;
+  color: white;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  border-bottom: 10px solid #23272f;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.App-header h1 {
+  margin: 20px 0 0 0;
+  padding: 10px 0;
+  font-size: 4rem;
+}
+
+.App-header input {
+  margin: 20px 0 50px 0;
+  border: none;
+  border-radius: 3px;
+  width: 250px;
+  padding: 10px;
+  font-weight: bold;
+  color: #1d79ec;
+}
+
+.App-header input:focus {
+  border: none;
+  outline: none;
+}
+
+.App-header small {
+  color: #393f4a;
+  font-weight: bold;
+  font-style: italic;
+}
+
+.App-section {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 150px;
+  padding: 130px 0 50px 0;
+}
+
+.App-section button {
+  background: white;
+  border: none;
+  padding: 5px 10px;
+  border-bottom: 5px solid silver;
+  border-radius: 3px;
+  color: darkslategray;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.App-section button:last-child {
+  margin-left: 10px;
+}
+
+.offers-container {
+  width: 90%;
+  padding: 20px 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-gap: 20px;
+}
+
+.offers-container .offer {
+  background: white;
+  padding-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  border-bottom: 5px solid #cecece;
+}
+
+.offers-container .offer h2 {
+  margin: 0;
+  padding: 20px 10px;
+  background: darkslateblue;
+  color: white;
+  font-weight: bold;
+  flex-grow: 1;
+}
+
+.offers-container .offer p {
+  margin: 20px 0;
+  padding: 10px;
+  font-style: italic;
+  color: #333;
+  flex-grow: 1;
+}
+
+.offers-container .offer a {
+  border-top: 2px solid;
+  text-decoration: none;
+  color: lightcoral;
+  padding: 20px 0 0 0;
+  font-weight: bold;
+}
+
+.buttons-container {
+  margin: 50px 0 0 0;
+}
+
+@media screen and (max-width: 420px) {
+
+  .App-header h1 {
+    font-size: 2.5rem;
+  }
+
+  .App-section {
+    margin-top: 120px;
+  }
+
+}

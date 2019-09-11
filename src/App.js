@@ -1,0 +1,180 @@
+import React, { Fragment, useState, useEffect } from 'react';
+import cheerio from 'cheerio'
+import './App.css';
+
+function App() {
+  
+  let [ data, setData ] = useState([])
+  let [ pageNum, setPageNum ] = useState(1)
+  let [ loading, setLoading ] = useState(true)
+  let [ error, setError ] = useState(false)
+
+  useEffect(() => {
+
+    (async () => {
+      let data = await getPage(pageNum)
+      let body$ = data.body
+
+      let values = await body$.getReader().read()
+      let blob = new Blob([ values.value ], { type: 'text/html' })
+      let reader = new FileReader()
+
+      reader.addEventListener('loadend', (e) => {
+        
+        let html = e.srcElement.result
+
+        // Prepare page
+        preparePage(html)
+      
+      });
+  
+      reader.readAsText(blob)
+
+    })()
+
+
+  }, [pageNum])
+
+  const preparePage = (page) => {
+    
+    const $ = cheerio.load(page)
+
+    // Check for internal server error in html
+    let headerError = $('#header').find('h1').contents()//[0].data
+    
+    if(headerError.length !== 0) {
+
+      setError(true)
+      setLoading(false)
+
+    } else {
+
+      // If no error was found - parse html and construct object
+      const tRows = $('#AutoNumber2').find('tbody')
+  
+      let data = [
+        { jobTitle: String($(tRows.find('tr')[0]).text()).trim(), jobData: String($(tRows.find('tr')[1]).text()), jobUrl: `http://tecnojobs.pt${$(tRows).find('a')[0].attribs.href}` },
+        { jobTitle: String($(tRows.find('tr')[2]).text()).trim(), jobData: String($(tRows.find('tr')[3]).text()), jobUrl: `http://tecnojobs.pt${$(tRows).find('a')[1].attribs.href}` },
+        { jobTitle: String($(tRows.find('tr')[4]).text()).trim(), jobData: String($(tRows.find('tr')[5]).text()), jobUrl: `http://tecnojobs.pt${$(tRows).find('a')[2].attribs.href}` },
+        { jobTitle: String($(tRows.find('tr')[6]).text()).trim(), jobData: String($(tRows.find('tr')[7]).text()), jobUrl: `http://tecnojobs.pt${$(tRows).find('a')[3].attribs.href}` },
+        { jobTitle: String($(tRows.find('tr')[8]).text()).trim(), jobData: String($(tRows.find('tr')[9]).text()), jobUrl: `http://tecnojobs.pt${$(tRows).find('a')[4].attribs.href}` },
+        { jobTitle: String($(tRows.find('tr')[10]).text()).trim(), jobData: String($(tRows.find('tr')[11]).text()), jobUrl: `http://tecnojobs.pt${$(tRows).find('a')[5].attribs.href}` },
+        { jobTitle: String($(tRows.find('tr')[12]).text()).trim(), jobData: String($(tRows.find('tr')[13]).text()), jobUrl: `http://tecnojobs.pt${$(tRows).find('a')[6].attribs.href}` },
+        { jobTitle: String($(tRows.find('tr')[14]).text()).trim(), jobData: String($(tRows.find('tr')[15]).text()), jobUrl: `http://tecnojobs.pt${$(tRows).find('a')[7].attribs.href}` },
+        { jobTitle: String($(tRows.find('tr')[16]).text()).trim(), jobData: String($(tRows.find('tr')[17]).text()), jobUrl: `http://tecnojobs.pt${$(tRows).find('a')[8].attribs.href}` },
+        { jobTitle: String($(tRows.find('tr')[18]).text()).trim(), jobData: String($(tRows.find('tr')[19]).text()), jobUrl: `http://tecnojobs.pt${$(tRows).find('a')[9].attribs.href}` },
+      ]
+    
+      setData(data)
+      setLoading(false)
+
+    }
+
+  } 
+
+  const getPage = async (pageNum) => {
+  
+    let rawRes = null
+  
+    try {
+  
+      if(pageNum === 1 || pageNum === 0) {
+        rawRes = await fetch(`http://localhost:4000`, { method: 'GET', headers: { 'Content-Type': 'text/html' } })
+      } else {
+        rawRes = await fetch(`http://localhost:4000/?page=${pageNum}`, { method: 'GET', headers: { 'Content-Type': 'text/html' } })
+      }
+      
+      return rawRes
+  
+    } catch(error) {
+      setError(true)
+    }
+  
+  }
+
+  const handleNextPage = () => {
+    setLoading(true)
+    setPageNum(pageNum + 1)
+  }
+
+  const handlePreviousPage = () => {
+    
+    setLoading(true)
+    
+    if(pageNum > 1) {
+      setPageNum(pageNum - 1)
+    }
+  
+  }
+
+  const handleSearch = (e) => {
+    
+    let value = e.target.value
+    
+    let filtered = data.filter(element => {
+
+      return (
+        element.jobTitle.toLowerCase().search(value) !== -1 ||
+        element.jobData.toLowerCase().search(value) !== -1
+      )
+
+    })
+
+    setData = filtered;
+
+  }
+
+  return (
+    <div className="App">
+      <header className="App-header">
+        <h1>TecnoJobs v2</h1>
+        <small>Página - { pageNum }</small>
+        <input type="text" placeholder="filtrar" onChange={ handleSearch } />
+      </header>
+      <section className="App-section">
+        { !loading &&
+          !error &&
+          data.length > 0 &&
+            (
+              <Fragment>
+                <div className="offers-container">
+                  { data.map((element, index) => {
+                      return (
+                        <div className="offer" key={index}>
+                          <h2>{ element.jobTitle }</h2>
+                          <p>{ element.jobData }</p>
+                          <a href={ element.jobUrl } target="_blank" rel="noopener noreferrer">Candidatura!</a>
+                        </div>
+                      )
+                    })
+                  }
+                </div>
+                <div className="buttons-container">
+                  { pageNum > 1 ?
+                    <Fragment>
+                      <button onClick={ handlePreviousPage }>Últimos 10</button>
+                      <button onClick={ handleNextPage }>Próximos 10!</button>
+                    </Fragment> :
+                    <Fragment>
+                      <button onClick={ handleNextPage }>Próximos 10!</button>
+                    </Fragment>
+                  }
+                </div>
+              </Fragment>
+            )
+        }
+        { loading &&
+            <small>Loading...</small>
+        }
+        { !loading && data.length === 0 && !error &&
+          <small>No Data!</small>
+        }
+        { !loading && error && 
+          <small>Error Loading Data!</small>
+        }
+      </section>
+    </div>
+  );
+}
+
+export default App;
