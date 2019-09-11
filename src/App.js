@@ -128,7 +128,7 @@ function App() {
 
   const handleFilter = (e) => {
     
-    let value = e.target.value
+    let value = e.target.value.toLowerCase()
 
     if(value.length === 0) {
 
