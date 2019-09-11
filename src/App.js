@@ -79,9 +79,9 @@ function App() {
     try {
   
       if(pageNum === 1 || pageNum === 0) {
-        rawRes = await fetch(`http://localhost:4000`, { method: 'GET', headers: { 'Content-Type': 'text/html' } })
+        rawRes = await fetch(`/api`, { method: 'GET', headers: { 'Content-Type': 'text/html' } })
       } else {
-        rawRes = await fetch(`http://localhost:4000/?page=${pageNum}`, { method: 'GET', headers: { 'Content-Type': 'text/html' } })
+        rawRes = await fetch(`/api/?page=${pageNum}`, { method: 'GET', headers: { 'Content-Type': 'text/html' } })
       }
       
       return rawRes
