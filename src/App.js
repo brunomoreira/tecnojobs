@@ -132,8 +132,8 @@ function App() {
     let filtered = data.filter(element => {
 
       return (
-        element.jobTitle.toLowerCase().search(value) !== -1 ||
-        element.jobData.toLowerCase().search(value) !== -1
+        element.jobTitle.toLowerCase().includes(value) ||
+        element.jobData.toLowerCase().includes(value)
       )
 
     })
