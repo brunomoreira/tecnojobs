@@ -3,14 +3,12 @@ const fetch = require('node-fetch')
 const cors = require('cors')
 const favicon = require('express-favicon')
 const path = require('path')
-const forceHttps = require('express-force-https')
 const helmet = require('helmet')
 
 const app = express()
 
 // Middleware
 app.use(cors())
-app.use(forceHttps())
 app.use(helmet())
 
 app.use(favicon(__dirname + '/build/favicon.ico'))
