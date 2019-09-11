@@ -16,20 +16,26 @@ function App() {
       let data = await getPage(pageNum)
       let body$ = data.body
 
-      let values = await body$.getReader().read()
-      let blob = new Blob([ values.value ], { type: 'text/html' })
-      let reader = new FileReader()
-
-      reader.addEventListener('loadend', async (e) => {
-        
-        let html = await e.srcElement.result
-
-        // Prepare page
-        preparePage(html)
+      let readings = await body$.getReader().read()
       
-      });
+      if(readings.done) {
+      
+        let blob = new Blob([ readings.value ], { type: 'text/html' })
+        let reader = new FileReader()
+      
+        reader.addEventListener('loadend', async (e) => {
+          
+          let html = await e.srcElement.result
   
-      reader.readAsText(blob)
+          // Prepare page
+          preparePage(html)
+        
+        });
+    
+        reader.readAsText(blob)
+      
+      }
+
 
     })()
 
