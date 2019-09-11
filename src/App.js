@@ -35,7 +35,7 @@ function App() {
     })()
 
 
-  }, [pageNum])
+  }, [pageNum, data])
 
   const preparePage = (page) => {
     
@@ -138,7 +138,7 @@ function App() {
 
     })
 
-    setData = filtered;
+    setData(filtered);
 
   }
 
