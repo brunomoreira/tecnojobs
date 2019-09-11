@@ -1,6 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import cheerio from 'cheerio'
 import './App.css';
+import { async } from 'q';
 
 function App() {
   
@@ -19,9 +20,9 @@ function App() {
       let blob = new Blob([ values.value ], { type: 'text/html' })
       let reader = new FileReader()
 
-      reader.addEventListener('loadend', (e) => {
+      reader.addEventListener('loadend', async (e) => {
         
-        let html = e.srcElement.result
+        let html = await e.srcElement.result
 
         // Prepare page
         preparePage(html)
