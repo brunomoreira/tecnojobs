@@ -23,22 +23,20 @@ app.get('/', function (req, res) {
 });
 
 // API endpoit
-app.get('/api', async (req, res) => {
+app.get('/api', (req, res) => {
     
     if(parseInt(req.query.page)) {
-        try {
-            let rawResponse = await fetch(`http://www.tecnojobs.pt/default.asp?page=${req.query.page}`)
-            rawResponse.body.pipe(res)
-        } catch(error) {
-            res.send(error)
-        }
+        
+        fetch(`http://www.tecnojobs.pt/default.asp?page=${req.query.page}`)
+            .then(data => data.body.pipe(res))
+            .catch(error => res.send(error))
+    
     } else {
-        try {
-            let rawResponse = await fetch('http://tecnojobs.pt')
-            rawResponse.body.pipe(res)
-        } catch(error) {
-            res.send(error)
-        }
+        
+        fetch('http://tecnojobs.pt')
+                .then(data => data.body.pipe(res))
+                .catch(error => res.send(error))
+    
     }
 
 })
