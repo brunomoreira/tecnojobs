@@ -173,10 +173,14 @@ function App() {
                   { pageNum > 1 ?
                     <Fragment>
                       <button onClick={ handlePreviousPage }>Últimos 10</button>
-                      <button onClick={ handleNextPage }>Próximos 10!</button>
+                      { pageNum <= 75 &&
+                        <button onClick={ handleNextPage }>Próximos 10!</button>
+                      }
                     </Fragment> :
                     <Fragment>
-                      <button onClick={ handleNextPage }>Próximos 10!</button>
+                      { pageNum <= 75 &&
+                        <button onClick={ handleNextPage }>Próximos 10!</button>
+                      }
                     </Fragment>
                   }
                 </div>
