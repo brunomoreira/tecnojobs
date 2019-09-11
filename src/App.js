@@ -69,16 +69,16 @@ function App() {
       ) {
 
         let data = [
-          { jobTitle: String($(tRows.find('tr')[0]).text()).trim(), jobData: String($(tRows.find('tr')[1]).text()), jobUrl: `http://tecnojobs.pt${$(tRows).find('a')[0] ? $(tRows).find('a')[0].attribs.href : 'http://tecnojobs.pt'}` },
-          { jobTitle: String($(tRows.find('tr')[2]).text()).trim(), jobData: String($(tRows.find('tr')[3]).text()), jobUrl: `http://tecnojobs.pt${$(tRows).find('a')[1] ? $(tRows).find('a')[1].attribs.href : 'http://tecnojobs.pt'}` },
-          { jobTitle: String($(tRows.find('tr')[4]).text()).trim(), jobData: String($(tRows.find('tr')[5]).text()), jobUrl: `http://tecnojobs.pt${$(tRows).find('a')[2] ? $(tRows).find('a')[2].attribs.href : 'http://tecnojobs.pt'}` },
-          { jobTitle: String($(tRows.find('tr')[6]).text()).trim(), jobData: String($(tRows.find('tr')[7]).text()), jobUrl: `http://tecnojobs.pt${$(tRows).find('a')[3] ? $(tRows).find('a')[3].attribs.href : 'http://tecnojobs.pt'}` },
-          { jobTitle: String($(tRows.find('tr')[8]).text()).trim(), jobData: String($(tRows.find('tr')[9]).text()), jobUrl: `http://tecnojobs.pt${$(tRows).find('a')[4] ? $(tRows).find('a')[4].attribs.href : 'http://tecnojobs.pt'}` },
-          { jobTitle: String($(tRows.find('tr')[10]).text()).trim(), jobData: String($(tRows.find('tr')[11]).text()), jobUrl: `http://tecnojobs.pt${$(tRows).find('a')[5] ? $(tRows).find('a')[5].attribs.href : 'http://tecnojobs.pt'}` },
-          { jobTitle: String($(tRows.find('tr')[12]).text()).trim(), jobData: String($(tRows.find('tr')[13]).text()), jobUrl: `http://tecnojobs.pt${$(tRows).find('a')[6] ? $(tRows).find('a')[6].attribs.href : 'http://tecnojobs.pt'}` },
-          { jobTitle: String($(tRows.find('tr')[14]).text()).trim(), jobData: String($(tRows.find('tr')[15]).text()), jobUrl: `http://tecnojobs.pt${$(tRows).find('a')[7] ? $(tRows).find('a')[7].attribs.href : 'http://tecnojobs.pt'}` },
-          { jobTitle: String($(tRows.find('tr')[16]).text()).trim(), jobData: String($(tRows.find('tr')[17]).text()), jobUrl: `http://tecnojobs.pt${$(tRows).find('a')[8] ? $(tRows).find('a')[8].attribs.href : 'http://tecnojobs.pt'}` },
-          { jobTitle: String($(tRows.find('tr')[18]).text()).trim(), jobData: String($(tRows.find('tr')[19]).text()), jobUrl: `http://tecnojobs.pt${$(tRows).find('a')[9] ? $(tRows).find('a')[9].attribs.href : 'http://tecnojobs.pt'}` },
+          { jobTitle: String($(tRows.find('tr')[0]).text()).trim(), jobData: String($(tRows.find('tr')[1]).text()), jobUrl: $(tRows).find('a')[0] ? `http://tecnojobs${(tRows).find('a')[0].attribs.href}` : 'http://tecnojobs.pt' },
+          { jobTitle: String($(tRows.find('tr')[2]).text()).trim(), jobData: String($(tRows.find('tr')[3]).text()), jobUrl: $(tRows).find('a')[1] ? `http://tecnojobs${(tRows).find('a')[1].attribs.href}` : 'http://tecnojobs.pt' },
+          { jobTitle: String($(tRows.find('tr')[4]).text()).trim(), jobData: String($(tRows.find('tr')[5]).text()), jobUrl: $(tRows).find('a')[2] ? `http://tecnojobs${(tRows).find('a')[2].attribs.href}` : 'http://tecnojobs.pt' },
+          { jobTitle: String($(tRows.find('tr')[6]).text()).trim(), jobData: String($(tRows.find('tr')[7]).text()), jobUrl: $(tRows).find('a')[3] ? `http://tecnojobs${(tRows).find('a')[3].attribs.href}` : 'http://tecnojobs.pt' },
+          { jobTitle: String($(tRows.find('tr')[8]).text()).trim(), jobData: String($(tRows.find('tr')[9]).text()), jobUrl: $(tRows).find('a')[4] ? `http://tecnojobs${(tRows).find('a')[4].attribs.href}` : 'http://tecnojobs.pt' },
+          { jobTitle: String($(tRows.find('tr')[10]).text()).trim(), jobData: String($(tRows.find('tr')[11]).text()), jobUrl: $(tRows).find('a')[5] ? `http://tecnojobs${(tRows).find('a')[5].attribs.href}` : 'http://tecnojobs.pt' },
+          { jobTitle: String($(tRows.find('tr')[12]).text()).trim(), jobData: String($(tRows.find('tr')[13]).text()), jobUrl: $(tRows).find('a')[6] ? `http://tecnojobs${(tRows).find('a')[6].attribs.href}` : 'http://tecnojobs.pt' },
+          { jobTitle: String($(tRows.find('tr')[14]).text()).trim(), jobData: String($(tRows.find('tr')[15]).text()), jobUrl: $(tRows).find('a')[7] ? `http://tecnojobs${(tRows).find('a')[7].attribs.href}` : 'http://tecnojobs.pt' },
+          { jobTitle: String($(tRows.find('tr')[16]).text()).trim(), jobData: String($(tRows.find('tr')[17]).text()), jobUrl: $(tRows).find('a')[8] ? `http://tecnojobs${(tRows).find('a')[8].attribs.href}` : 'http://tecnojobs.pt' },
+          { jobTitle: String($(tRows.find('tr')[18]).text()).trim(), jobData: String($(tRows.find('tr')[19]).text()), jobUrl: $(tRows).find('a')[9] ? `http://tecnojobs${(tRows).find('a')[9].attribs.href}` : 'http://tecnojobs.pt' },
         ]
 
         setData(data)
