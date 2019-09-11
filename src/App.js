@@ -78,10 +78,11 @@ function App() {
   
     try {
   
+      //https://tecnojobs-app.herokuapp.com/
       if(pageNum === 1 || pageNum === 0) {
-        rawRes = await fetch(`/api`, { method: 'GET', headers: { 'Content-Type': 'text/html' } })
+        rawRes = await fetch(`https://tecnojobs-app.herokuapp.com/api`, { method: 'GET', headers: { 'Content-Type': 'text/html' } })
       } else {
-        rawRes = await fetch(`/api/?page=${pageNum}`, { method: 'GET', headers: { 'Content-Type': 'text/html' } })
+        rawRes = await fetch(`https://tecnojobs-app.herokuapp.com/api?page=${pageNum}`, { method: 'GET', headers: { 'Content-Type': 'text/html' } })
       }
       
       return rawRes

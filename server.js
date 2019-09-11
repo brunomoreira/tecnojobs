@@ -41,9 +41,9 @@ app.get('/api', async (req, res) => {
 })
 
 // Redirect to / if any other path is request
-app.get('*', function (req, res) {
+/* app.get('*', function (req, res) {
     res.redirect('/')
-});
+}); */
 
 
 app.listen(process.env.PORT || 4000)
