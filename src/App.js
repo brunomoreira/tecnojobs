@@ -184,13 +184,13 @@ function App() {
             )
         }
         { loading &&
-            <small>Loading...</small>
+            <p className="message">Loading...</p>
         }
         { !loading && data.length === 0 && !error &&
-          <small>No Data!</small>
+          <p className="message">No Data!</p>
         }
         { !loading && error && 
-          <small>Error Loading Data!</small>
+          <p className="message">Error Loading Data!</p>
         }
       </section>
     </div>
