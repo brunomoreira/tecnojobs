@@ -8,6 +8,7 @@ function App() {
   let [ pageNum, setPageNum ] = useState(1)
   let [ loading, setLoading ] = useState(true)
   let [ error, setError ] = useState(false)
+  let [ filtered, setFiltered ] = useState([])
 
   useEffect(() => {
 
@@ -35,7 +36,7 @@ function App() {
     })()
 
 
-  }, [pageNum, data])
+  }, [pageNum])
 
   const preparePage = (page) => {
     
@@ -125,20 +126,28 @@ function App() {
   
   }
 
-  const handleSearch = (e) => {
+  const handleFilter = (e) => {
     
     let value = e.target.value
+
+    if(value.length === 0) {
+
+      return setFiltered([])
+
+    } else {
+
+      let filtered = data.filter(element => {
+  
+        return (
+          element.jobTitle.toLowerCase().includes(value) ||
+          element.jobData.toLowerCase().includes(value)
+        )
+  
+      })
+  
+      return setFiltered(filtered)
     
-    let filtered = data.filter(element => {
-
-      return (
-        element.jobTitle.toLowerCase().includes(value) ||
-        element.jobData.toLowerCase().includes(value)
-      )
-
-    })
-
-    setData(filtered);
+    }
 
   }
 
@@ -147,11 +156,12 @@ function App() {
       <header className="App-header">
         <h1>TecnoJobs v2</h1>
         <small>Página - { pageNum }</small>
-        <input type="text" placeholder="filtrar" onChange={ handleSearch } />
+        <input type="text" placeholder="filtrar" onChange={ handleFilter } />
       </header>
       <section className="App-section">
         { !loading &&
           !error &&
+          filtered.length === 0 &&
           data.length > 0 &&
             (
               <Fragment>
@@ -184,6 +194,24 @@ function App() {
                 </div>
               </Fragment>
             )
+        }
+        { !loading &&
+          !error &&
+          filtered.length !== 0 &&
+          (
+              <div className="offers-container">
+              { filtered.map((element, index) => {
+                  return (
+                      <div className="offer" key={index}>
+                      <h2>{ element.jobTitle }</h2>
+                      <p>{ element.jobData }</p>
+                      <a href={ element.jobUrl } target="_blank" rel="noopener noreferrer">Candidatura!</a>
+                      </div>
+                  )
+                  })
+              }
+              </div>
+          )
         }
         { loading &&
             <p className="message">Loading...</p>
