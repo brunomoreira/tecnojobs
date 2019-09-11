@@ -1,7 +1,6 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useState, useEffect } from 'react'
 import cheerio from 'cheerio'
-import './App.css';
-import { async } from 'q';
+import './App.css'
 
 function App() {
   
@@ -96,8 +95,7 @@ function App() {
     let rawRes = null
   
     try {
-  
-      //https://tecnojobs-app.herokuapp.com/
+
       if(pageNum === 1 || pageNum === 0) {
         rawRes = await fetch(`/api`, { method: 'GET', headers: { 'Content-Type': 'text/html' } })
       } else {
