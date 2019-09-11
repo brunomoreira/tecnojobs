@@ -18,23 +18,19 @@ function App() {
 
       let readings = await body$.getReader().read()
       
-      if(readings.done) {
-      
-        let blob = new Blob([ readings.value ], { type: 'text/html' })
-        let reader = new FileReader()
-      
-        reader.addEventListener('loadend', (e) => {
-          
-          let html = e.srcElement.result
-  
-          // Prepare page
-          preparePage(html)
-        
-        });
+      let blob = new Blob([ readings.value ], { type: 'text/html' })
+      let reader = new FileReader()
     
-        reader.readAsText(blob)
+      reader.addEventListener('loadend', (e) => {
+        
+        let html = e.srcElement.result
+
+        // Prepare page
+        preparePage(html)
       
-      }
+      });
+  
+      reader.readAsText(blob)
 
 
     })()
