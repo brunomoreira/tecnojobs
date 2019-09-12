@@ -5,8 +5,8 @@ const cors = require('cors')
 const app = express()
 
 app.use(cors())
-app.get('/', async (req, res) => {
-    
+app.get('/api', async (req, res) => {
+
     if(parseInt(req.query.page)) {
         try {
             let rawResponse = await fetch(`http://www.tecnojobs.pt/default.asp?page=${req.query.page}`)
