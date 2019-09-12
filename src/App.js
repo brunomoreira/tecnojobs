@@ -97,12 +97,10 @@ function App() {
   
     try {
 
-      let baseURL = 'https://tecnojobs-app.herokuapp.com'
-
       if(pageNum === 1 || pageNum === 0) {
-        rawRes = await fetch(`${baseURL}/api`, { method: 'GET', headers: { 'Content-Type': 'text/html' } })
+        rawRes = await fetch(`/api`, { method: 'GET', headers: { 'Content-Type': 'text/html' } })
       } else {
-        rawRes = await fetch(`${baseURL}/api?page=${pageNum}`, { method: 'GET', headers: { 'Content-Type': 'text/html' } })
+        rawRes = await fetch(`/api?page=${pageNum}`, { method: 'GET', headers: { 'Content-Type': 'text/html' } })
       }
       
       return rawRes
