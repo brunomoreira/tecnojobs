@@ -22,20 +22,22 @@ app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname, 'build', 'index.html'))
 });
 
-// API endpoit
-app.get('/api', (req, res) => {
+// API endpoint
+app.get('/api', async (req, res) => {
     
     if(parseInt(req.query.page)) {
         
-        fetch(`http://www.tecnojobs.pt/default.asp?page=${req.query.page}`)
-            .then(data => data.body.pipe(res))
-            .catch(error => res.send(error))
-    
+        let raw = await fetch(`http://tecnojobs.pt/default.asp?page=${req.query.page}`)
+        let html = await raw.text()
+
+        res.send(html)
+
     } else {
         
-        fetch('http://tecnojobs.pt')
-                .then(data => data.body.pipe(res))
-                .catch(error => res.send(error))
+        let raw = await fetch('http://tecnojobs.pt')
+        let html = await raw.text()
+    
+        res.send(html)
     
     }
 

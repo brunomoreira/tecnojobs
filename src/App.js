@@ -13,24 +13,12 @@ function App() {
   useEffect(() => {
 
     (async () => {
-      let data = await getPage(pageNum)
-      let body$ = data.body
-
-      let readings = await body$.getReader().read()
       
-      let blob = new Blob([ readings.value ], { type: 'text/html' })
-      let reader = new FileReader()
-    
-      reader.addEventListener('loadend', (e) => {
-        
-        let html = e.srcElement.result
-
-        // Prepare page
-        preparePage(html)
+      let raw = await getPage(pageNum)
+      let html = await raw.text()
       
-      });
-  
-      reader.readAsText(blob)
+      // Prepare page
+      preparePage(html)
 
 
     })()
@@ -92,18 +80,21 @@ function App() {
   } 
 
   const getPage = async (pageNum) => {
-  
-    let rawRes = null
-  
+
     try {
 
       if(pageNum === 1 || pageNum === 0) {
-        rawRes = await fetch(`/api`, { method: 'GET', headers: { 'Content-Type': 'text/html' } })
+      
+        let response = await fetch(`/api`)
+        return response
+      
       } else {
-        rawRes = await fetch(`/api?page=${pageNum}`, { method: 'GET', headers: { 'Content-Type': 'text/html' } })
+        
+        let response = await fetch(`/api?page=${pageNum}`)
+        return response
+      
       }
       
-      return rawRes
   
     } catch(error) {
       setError(true)
