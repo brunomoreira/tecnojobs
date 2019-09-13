@@ -26,18 +26,42 @@ app.get('/', function (req, res) {
 app.get('/api', async (req, res) => {
     
     if(parseInt(req.query.page)) {
-        
-        let raw = await fetch(`http://tecnojobs.pt/default.asp?page=${req.query.page}`)
-        let html = await raw.text()
 
-        res.send(html)
+        if(req.query.CHAVES) {
+
+            let raw = await fetch(`http://tecnojobs.pt/default.asp?page=${req.query.page}&CHAVES=${req.query.CHAVES}`)
+            let html = await raw.text()
+    
+            res.send(html)
+
+        } else {
+            
+            let raw = await fetch(`http://tecnojobs.pt/default.asp?page=${req.query.page}`)
+            let html = await raw.text()
+    
+            res.send(html)
+
+        }
+        
 
     } else {
         
-        let raw = await fetch('http://tecnojobs.pt')
-        let html = await raw.text()
-    
-        res.send(html)
+        if(req.query.CHAVES) {
+
+            let raw = await fetch(`http://www.tecnojobs.pt/default.asp?chaves=${req.query.CHAVES}`)
+            let html = await raw.text()
+        
+            res.send(html)
+
+        } else {
+            
+            let raw = await fetch('http://tecnojobs.pt')
+            let html = await raw.text()
+        
+            res.send(html)
+
+        }
+
     
     }
 
@@ -46,31 +70,31 @@ app.get('/api', async (req, res) => {
 app.get('/api/cities', (req, res) => {
 
     let cities = [
-        "Alcobaça (Portugal)",
+        "Alcobaça",
         "Alfena",
         "Almada",
-        "Almeirim (Portugal)",
+        "Almeirim",
         "Alverca do Ribatejo",
         "Amadora",
-        "Amarante (Portugal)",
-        "Amora (Seixal)",
-        "Anadia (Portugal)",
+        "Amarante",
+        "Amora",
+        "Anadia",
         "Angra do Heroísmo",
-        "Aveiro (Portugal)",
+        "Aveiro",
         "Benavente",
         "Barcelos",
         "Barreiro",
         "Beja",
-        "Borba (Portugal)",
+        "Borba",
         "Braga",
-        "Bragança (Portugal)",
+        "Bragança",
         "Caldas da Rainha",
         "Câmara de Lobos",
-        "Caniço (Santa Cruz)",
-        "Cantanhede (Portugal)",
+        "Caniço",
+        "Cantanhede",
         "Cartaxo",
         "Castelo Branco",
-        "Chaves (Portugal)",
+        "Chaves",
         "Coimbra",
         "Costa da Caparica",
         "Covilhã",
@@ -78,38 +102,38 @@ app.get('/api/cities', (req, res) => {
         "Entroncamento",
         "Ermesinde",
         "Esmoriz",
-        "Espinho (Portugal)",
+        "Espinho",
         "Esposende",
         "Estarreja",
         "Estremoz",
         "Évora",
         "Fafe",
         "Faro",
-        "Fátima (Ourém)",
+        "Fátima",
         "Felgueiras",
         "Figueira da Foz",
-        "Fiães (Santa Maria da Feira)",
+        "Fiães",
         "Freamunde",
         "Funchal",
-        "Fundão (Castelo Branco)",
+        "Fundão",
         "Gafanha da Nazaré",
-        "Gandra (Paredes)",
+        "Gandra",
         "Gondomar",
-        "Gouveia (Portugal)",
+        "Gouveia",
         "Guarda",
         "Guimarães",
         "Horta",
         "Ílhavo",
-        "Lagoa (Açores)",
-        "Lagoa (Algarve)",
-        "Lagos (Portugal)",
+        "Lagoa",
+        "Lagoa",
+        "Lagos",
         "Lamego",
         "Leiria",
         "Lisboa",
-        "Lixa (Portugal)",
+        "Lixa",
         "Loulé",
         "Loures",
-        "Lourosa (Santa Maria da Feira)",
+        "Lourosa",
         "Macedo de Cavaleiros",
         "Machico",
         "Maia",
@@ -130,7 +154,7 @@ app.get('/api/cities', (req, res) => {
         "Oliveira de Azeméis",
         "Oliveira do Bairro",
         "Oliveira do Hospital",
-        "Ourém (Portugal)",
+        "Ourém",
         "Ovar",
         "Paços de Ferreira",
         "Paredes",
@@ -138,42 +162,42 @@ app.get('/api/cities', (req, res) => {
         "Peniche",
         "Peso da Régua",
         "Pinhel",
-        "Pombal (Portugal)",
+        "Pombal",
         "Ponta Delgada",
         "Ponte de Sor",
-        "Portalegre (Portugal)",
+        "Portalegre",
         "Portimão",
         "Porto",
         "Póvoa de Santa Iria",
         "Póvoa de Varzim",
         "Praia da Vitória",
         "Quarteira",
-        "Queluz (cidade)",
+        "Queluz",
         "Rebordosa",
         "Reguengos de Monsaraz",
-        "Ribeira Grande (Açores)",
+        "Ribeira Grande",
         "Rio Maior",
-        "Rio Tinto (Gondomar)",
+        "Rio Tinto",
         "Sabugal",
         "Sacavém",
         "Samora Correia",
         "Santa Comba Dão",
-        "Santa Cruz (Madeira)",
+        "Santa Cruz",
         "Santa Maria da Feira",
-        "Santana (Madeira)",
-        "Santarém (Portugal)",
+        "Santana",
+        "Santarém",
         "Santiago do Cacém",
         "Santo Tirso",
         "São João da Madeira",
         "São Mamede de Infesta",
-        "São Pedro do Sul (Portugal)",
-        "Lordelo (Paredes)",
+        "São Pedro do Sul",
+        "Lordelo",
         "Seia",
         "Seixal",
         "Senhora da Hora",
         "Serpa",
         "Setúbal",
-        "Silves (Portugal)",
+        "Silves",
         "Sines",
         "Tarouca",
         "Tavira",
@@ -183,9 +207,9 @@ app.get('/api/cities', (req, res) => {
         "Torres Vedras",
         "Trancoso",
         "Trofa",
-        "Valbom (Gondomar)",
+        "Valbom",
         "Vale de Cambra",
-        "Valença (Portugal)",
+        "Valença",
         "Valongo",
         "Valpaços",
         "Vendas Novas",

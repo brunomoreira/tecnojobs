@@ -1,50 +1,91 @@
-import React, { Fragment, useState, useEffect } from 'react'
+import React, { Component, Fragment } from 'react'
 import cheerio from 'cheerio'
 import './App.css'
 
-function App() {
+class App extends Component {
 
-  const config = {
+  state = {
+    data: [],
+    pageNum: 1,
+    loading: true,
+    error: false,
+    filtered: [],
+    cities: [],
+    city: null
+  }
+
+  componentDidMount() {
+
+    (async () => {
+
+      let raw = await this.getPage(this.state.pageNum)
+      let html = await raw.text()
+
+      this.preparePage(html)
+
+      this.loadCities()
+
+    })()
+
+  }
+
+  config = {
     dev: 'https://tecnojobs-app.herokuapp.com/api/',
     prod: '/api/'
   }
   
-  let [ data, setData ] = useState([])
-  let [ pageNum, setPageNum ] = useState(1)
-  let [ loading, setLoading ] = useState(true)
-  let [ error, setError ] = useState(false)
-  let [ filtered, setFiltered ] = useState([])
-  let [ cities, setCities ] = useState([])
-
-  useEffect(() => {
-
-    // Request html page
-    (async () => {
-      
-      let raw = await getPage(pageNum)
-      let html = await raw.text()
-      
-      // Prepare page
-      preparePage(html)
-
-      // Load cities
-      loadCities()  
-
-    })()
+  getPage = async (pageNum, city = null) => {
     
-  }, [pageNum])
+    try {
+
+      if(pageNum === 1 || pageNum === 0) {
+        
+        if(city) {
+
+          let response = await fetch(`${this.config.dev}?CHAVES=${city}`)
+          return response
+
+        } else {
+
+          let response = await fetch(`${this.config.dev}`)
+          return response
+        }
+      
+      } else {
+
+        if(city) {
+
+          let response = await fetch(`${this.config.dev}?page=${pageNum}&CHAVES=${city}`)
+          return response
+
+        } else {
+          
+          let response = await fetch(`${this.config.dev}?page=${pageNum}`)
+          return response
+        
+        }
+      
+      }
+      
   
-  const loadCities = async () => {
+    } catch(error) {
+      this.setState({ error: true })
+    }
+  }
+
+  loadCities = async () => {
     
-    let raw = await fetch(`${config.dev}cities`)
+    let raw = await fetch(`${this.config.dev}cities`)
     let { cities } = await raw.json()
-    
-    console.log(cities)
-    setCities(cities)
+
+    this.setState((prevState, prevProps) => ({
+      ...prevState,
+      cities
+    }))
   
   }
 
-  const preparePage = (page) => {
+  preparePage = (page) => {
     
     const $ = cheerio.load(page)
 
@@ -53,8 +94,7 @@ function App() {
     
     if(headerError.length !== 0) {
 
-      setError(true)
-      setLoading(false)
+      this.setState({ error: true, loading: false })
 
     } else {
 
@@ -87,65 +127,63 @@ function App() {
           { jobTitle: String($(tRows.find('tr')[18]).text()).trim(), jobData: String($(tRows.find('tr')[19]).text()), jobUrl: $(tRows).find('a')[9] ? `http://tecnojobs.pt${(tRows).find('a')[9].attribs.href}` : 'http://tecnojobs.pt' },
         ]
 
-        setData(data)
+        this.setState((prevState, prevProps) => ({
+          ...prevState,
+          data
+        }))
       
       }
     
-      setLoading(false)
+      this.setState({ loading: false })
 
     }
 
-  } 
-
-  const getPage = async (pageNum) => {
-
-    try {
-
-      if(pageNum === 1 || pageNum === 0) {
-      
-        let response = await fetch(`${config.dev}`)
-        return response
-      
-      } else {
-        
-        let response = await fetch(`${config.dev}?page=${pageNum}`)
-        return response
-      
-      }
-      
-  
-    } catch(error) {
-      setError(true)
-    }
-  
   }
 
-  const handleNextPage = () => {
-    setLoading(true)
-    setPageNum(pageNum + 1)
-  }
-
-  const handlePreviousPage = () => {
+  handleNextPage = async () => {
     
-    setLoading(true)
+    this.setState((prevState, prevProps) => ({
+      ...prevState,
+      loading: true,
+      pageNum: prevState.pageNum + 1
+    }))
+
+    let raw = await this.getPage(this.state.pageNum + 1, this.state.city)
+    this.preparePage(raw.text())
+
+  }
+
+  handlePreviousPage = async () => {
     
-    if(pageNum > 1) {
-      setPageNum(pageNum - 1)
+    if(this.state.pageNum > 1) {
+      
+      this.setState((prevState, prevProps) => ({
+        ...prevState,
+        loading: true,
+        pageNum: prevState.pageNum - 1
+      }))
+
+      let raw = await this.getPage(this.state.pageNum - 1, this.state.city)
+      this.preparePage(raw.text())
+  
     }
   
   }
 
-  const handleFilter = (e) => {
+  handleFilter = (e) => {
     
     let value = e.target.value.toLowerCase()
 
     if(value.length === 0) {
 
-      return setFiltered([])
+      this.setState((prevState, prevProps) => ({
+        ...prevState,
+        filtered: []
+      }))
 
     } else {
 
-      let filtered = data.filter(element => {
+      let filtered = this.state.data.filter(element => {
   
         return (
           element.jobTitle.toLowerCase().includes(value) ||
@@ -154,93 +192,116 @@ function App() {
   
       })
   
-      return setFiltered(filtered)
+      this.setState((prevState, prevProps) => ({
+        ...prevState,
+        filtered
+      }))
     
     }
 
   }
 
-  return (
-    <div className="App">
-      <header className="App-header">
-        <h1>TecnoJobs v2</h1>
-        <small>Página - { pageNum }</small>
-        <input type="text" placeholder="filtrar" onChange={ handleFilter } />
-        { cities.length > 0 && 
-          <select>
-            { cities.map(city => {
-                return <option value={city} key={city}>{city}</option>
-            }) }
-          </select>
-        }
-      </header>
-      <section className="App-section">
-        { !loading &&
-          !error &&
-          filtered.length === 0 &&
-          data.length > 0 &&
+  handleCityChange = async (e) => {
+
+    let city = e.target.value
+    
+    this.setState({ city })
+
+    let raw = await this.getPage(1, city)
+
+    this.preparePage(raw.text())
+
+  }
+
+  render() {
+
+    let { pageNum, cities, loading, error, filtered, data } = this.state
+
+    return (
+      <div className="App">
+        <header className="App-header">
+          <h1>TecnoJobs v2</h1>
+          <div className="actions">
+            <input type="text" placeholder="filtrar" onChange={ this.handleFilter } />
+            { cities.length > 0 && 
+              <select onChange={ this.handleCityChange }>
+                  <option value="any">Qualquer</option>
+                { cities.map(city => {
+                    return <option value={city} key={city}>{city}</option>
+                }) }
+              </select>
+            }
+          </div>
+        </header>
+        <section className="App-section">
+          { !loading &&
+            !error &&
+            filtered.length === 0 &&
+            data.length > 0 &&
+              (
+                <Fragment>
+                  <div className="offers-container">
+                    { data.map((element, index) => {
+                        return (
+                          <div className="offer" key={index}>
+                            <h2>{ element.jobTitle }</h2>
+                            <p>{ element.jobData }</p>
+                            <a href={ element.jobUrl } target="_blank" rel="noopener noreferrer">Candidatura!</a>
+                          </div>
+                        )
+                      })
+                    }
+                  </div>
+                  <div className="buttons-container">
+                    { pageNum > 1 ?
+                      <Fragment>
+                        <button onClick={ this.handlePreviousPage }>Últimos 10</button>
+                        { pageNum <= 75 &&
+                          <button onClick={ this.handleNextPage }>Próximos 10!</button>
+                        }
+                      </Fragment> :
+                      <Fragment>
+                        { pageNum <= 75 &&
+                          <button onClick={ this.handleNextPage }>Próximos 10!</button>
+                        }
+                      </Fragment>
+                    }
+                  </div>
+                  <small>Página - { pageNum }</small>
+                </Fragment>
+              )
+          }
+          { !loading &&
+            !error &&
+            filtered.length !== 0 &&
             (
-              <Fragment>
                 <div className="offers-container">
-                  { data.map((element, index) => {
-                      return (
+                { filtered.map((element, index) => {
+                    return (
                         <div className="offer" key={index}>
-                          <h2>{ element.jobTitle }</h2>
-                          <p>{ element.jobData }</p>
-                          <a href={ element.jobUrl } target="_blank" rel="noopener noreferrer">Candidatura!</a>
+                        <h2>{ element.jobTitle }</h2>
+                        <p>{ element.jobData }</p>
+                        <a href={ element.jobUrl } target="_blank" rel="noopener noreferrer">Candidatura!</a>
                         </div>
-                      )
+                    )
                     })
-                  }
+                }
                 </div>
-                <div className="buttons-container">
-                  { pageNum > 1 ?
-                    <Fragment>
-                      <button onClick={ handlePreviousPage }>Últimos 10</button>
-                      { pageNum <= 75 &&
-                        <button onClick={ handleNextPage }>Próximos 10!</button>
-                      }
-                    </Fragment> :
-                    <Fragment>
-                      { pageNum <= 75 &&
-                        <button onClick={ handleNextPage }>Próximos 10!</button>
-                      }
-                    </Fragment>
-                  }
-                </div>
-              </Fragment>
             )
-        }
-        { !loading &&
-          !error &&
-          filtered.length !== 0 &&
-          (
-              <div className="offers-container">
-              { filtered.map((element, index) => {
-                  return (
-                      <div className="offer" key={index}>
-                      <h2>{ element.jobTitle }</h2>
-                      <p>{ element.jobData }</p>
-                      <a href={ element.jobUrl } target="_blank" rel="noopener noreferrer">Candidatura!</a>
-                      </div>
-                  )
-                  })
-              }
-              </div>
-          )
-        }
-        { loading &&
-            <p className="message">Loading...</p>
-        }
-        { !loading && data.length === 0 && !error &&
-          <p className="message">No Data!</p>
-        }
-        { !loading && error && 
-          <p className="message">Error Loading Data!</p>
-        }
-      </section>
-    </div>
-  );
+          }
+          { loading &&
+              <p className="message">Loading...</p>
+          }
+          { !loading && data.length === 0 && !error &&
+            <p className="message">No Data!</p>
+          }
+          { !loading && error && 
+            <p className="message">Error Loading Data!</p>
+          }
+        </section>
+      </div>
+    );
+  }
 }
 
 export default App;

@@ -12,24 +12,39 @@
   width: 100%;
   border-bottom: 10px solid #23272f;
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
 }
 
 .App-header h1 {
-  margin: 20px 0 0 0;
-  padding: 10px 0;
-  font-size: 4rem;
+  padding: 0 0 0 20px;
+  font-size: 3rem;
 }
 
-.App-header input {
-  margin: 20px 0 50px 0;
+small {
+  color: #5d465a;
+  font-weight: bold;
+  margin-top: 50px;
+}
+
+.App-header select {
   border: none;
   border-radius: 3px;
   width: 250px;
   padding: 10px;
   font-weight: bold;
   color: #1d79ec;
+  margin-right: 20px;
+}
+
+.App-header input {
+  border: none;
+  border-radius: 3px;
+  width: 250px;
+  padding: 10px;
+  font-weight: bold;
+  color: #1d79ec;
+  margin-right: 20px;
 }
 
 .App-header input:focus {
@@ -37,10 +52,8 @@
   outline: none;
 }
 
-.App-header small {
-  color: #7ab592;
-  font-weight: bold;
-  font-style: italic;
+.App-header .actions {
+  display: flex;
 }
 
 .App-section {
@@ -49,8 +62,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 150px;
-  padding: 130px 0 50px 0;
+  margin-top: 120px;
+  padding: 50px 0 50px 0;
 }
 
 .App-section button {
@@ -122,14 +135,49 @@
   margin: 50px 0 0 0;
 }
 
-@media screen and (max-width: 420px) {
+@media screen and (max-width: 960px) {
+
+  .App-header {
+    flex-direction: column;
+  }
+
+  .App-header .actions {
+    padding: 0 0 20px 0;
+  }
 
   .App-header h1 {
-    font-size: 2.5rem;
+    font-size: 2rem;
+    padding: 0;
   }
 
   .App-section {
-    margin-top: 120px;
+    margin-top: 150px;
+  }
+
+}
+
+@media screen and (max-width: 650px) {
+
+  .App-header .actions {
+    flex-direction: column;
+  }
+
+  .App-header .actions input {
+    margin: 0 0 10px 0;
+    width: 300px;
+  }
+
+  .App-header .actions select {
+    width: 300px;
+  }
+
+}
+
+@media screen and (max-width: 430px) {
+
+  .App-header .actions input,
+  .App-header .actions select {
+    width: 200px;
   }
 
 }
