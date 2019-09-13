@@ -39,6 +39,7 @@ function App() {
     let raw = await fetch(`${config.dev}cities`)
     let { cities } = await raw.json()
     
+    console.log(cities)
     setCities(cities)
   
   }
