@@ -18,7 +18,7 @@ class App extends Component {
 
     (async () => {
 
-      let raw = await this.getPage(this.state.pageNum)
+      let raw = await this.getPage(this.state.pageNum, null)
       let html = await raw.text()
 
       this.preparePage(html)
@@ -34,7 +34,7 @@ class App extends Component {
     prod: '/api/'
   }
   
-  getPage = async (pageNum, city = null) => {
+  getPage = async (pageNum, city) => {
     
     try {
 
@@ -205,11 +205,12 @@ class App extends Component {
 
     let city = e.target.value
     
-    this.setState({ city })
+    this.setState({ city, loading: true, pageNum: 1 })
 
     let raw = await this.getPage(1, city)
+    let html = await raw.text()
 
-    this.preparePage(raw.text())
+    this.preparePage(html)
 
   }
 
