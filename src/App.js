@@ -3,15 +3,22 @@ import cheerio from 'cheerio'
 import './App.css'
 
 function App() {
+
+  const config = {
+    dev: 'https://tecnojobs-app.herokuapp.com/',
+    prod: '/'
+  }
   
   let [ data, setData ] = useState([])
   let [ pageNum, setPageNum ] = useState(1)
   let [ loading, setLoading ] = useState(true)
   let [ error, setError ] = useState(false)
   let [ filtered, setFiltered ] = useState([])
+  let [ cities, setCities ] = useState([])
 
   useEffect(() => {
 
+    // Request html page
     (async () => {
       
       let raw = await getPage(pageNum)
@@ -23,8 +30,19 @@ function App() {
 
     })()
 
-
+    // Load cities
+    loadCities()  
+    
   }, [pageNum])
+  
+  const loadCities = async () => {
+    
+    let raw = await fetch(`${config.dev}cities`)
+    let { cities } = await raw.json()
+    
+    setCities(cities)
+  
+  }
 
   const preparePage = (page) => {
     
@@ -85,12 +103,12 @@ function App() {
 
       if(pageNum === 1 || pageNum === 0) {
       
-        let response = await fetch(`/api`)
+        let response = await fetch(`${config.dev}api`)
         return response
       
       } else {
         
-        let response = await fetch(`/api?page=${pageNum}`)
+        let response = await fetch(`${config.dev}api?page=${pageNum}`)
         return response
       
       }
@@ -148,6 +166,13 @@ function App() {
         <h1>TecnoJobs v2</h1>
         <small>Página - { pageNum }</small>
         <input type="text" placeholder="filtrar" onChange={ handleFilter } />
+        { cities.length > 0 && 
+          <select>
+            { cities.map(city => {
+                return <option value={city} key={city}>{city}</option>
+            }) }
+          </select>
+        }
       </header>
       <section className="App-section">
         { !loading &&

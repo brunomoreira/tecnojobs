@@ -43,6 +43,23 @@ app.get('/api', async (req, res) => {
 
 })
 
+app.get('/cities', async (req, res) => {
+
+    let raw = await fetch('https://pt.wikipedia.org/wiki/Lista_de_cidades_em_Portugal')
+    let html = await raw.text()
+
+    let $ = cheerio.load(html)
+    
+    let cities = $('b > a')
+        .get()
+        .map(el => el.attribs.title)
+        .filter(title => title !== undefined)
+        .slice(8, -1)
+
+    res.send({ cities })
+
+})
+
 // Redirect to / if any other path is request
 app.get('*', function (req, res) {
     res.redirect('/')
