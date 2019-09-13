@@ -37,7 +37,7 @@ function App() {
   
   const loadCities = async () => {
     
-    let raw = await fetch(`${config.dev}cities`)
+    let raw = await fetch(`${config.prod}cities`)
     let { cities } = await raw.json()
     
     setCities(cities)
@@ -103,12 +103,12 @@ function App() {
 
       if(pageNum === 1 || pageNum === 0) {
       
-        let response = await fetch(`${config.dev}api`)
+        let response = await fetch(`${config.prod}api`)
         return response
       
       } else {
         
-        let response = await fetch(`${config.dev}api?page=${pageNum}`)
+        let response = await fetch(`${config.prod}api?page=${pageNum}`)
         return response
       
       }
