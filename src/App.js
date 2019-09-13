@@ -30,7 +30,7 @@ class App extends Component {
   }
 
   config = {
-    dev: 'https://tecnojobs-app.herokuapp.com/api/',
+    dev: 'http://localhost:4000/api/',
     prod: '/api/'
   }
   
@@ -42,12 +42,12 @@ class App extends Component {
         
         if(city) {
 
-          let response = await fetch(`${this.config.prod}?CHAVES=${city}`)
+          let response = await fetch(`${this.config.dev}?CHAVES=${city}`)
           return response
 
         } else {
 
-          let response = await fetch(`${this.config.prod}`)
+          let response = await fetch(`${this.config.dev}`)
           return response
         }
       
@@ -55,12 +55,12 @@ class App extends Component {
 
         if(city) {
 
-          let response = await fetch(`${this.config.prod}?page=${pageNum}&CHAVES=${city}`)
+          let response = await fetch(`${this.config.dev}?page=${pageNum}&CHAVES=${city}`)
           return response
 
         } else {
           
-          let response = await fetch(`${this.config.prod}?page=${pageNum}`)
+          let response = await fetch(`${this.config.dev}?page=${pageNum}`)
           return response
         
         }
@@ -75,7 +75,7 @@ class App extends Component {
 
   loadCities = async () => {
     
-    let raw = await fetch(`${this.config.prod}cities`)
+    let raw = await fetch(`${this.config.dev}cities`)
     let { cities } = await raw.json()
 
     this.setState((prevState, prevProps) => ({
@@ -100,39 +100,56 @@ class App extends Component {
 
       // If no error was found - parse html and construct object
       const tRows = $('#AutoNumber2').find('tbody')
-  
-      if(
-        $(tRows.find('tr')[0]).text().length > 0 && 
-        $(tRows.find('tr')[1]).text().length > 0 &&
-        $(tRows.find('tr')[2]).text().length > 0 && 
-        $(tRows.find('tr')[3]).text().length > 0 &&
-        $(tRows.find('tr')[4]).text().length > 0 && 
-        $(tRows.find('tr')[5]).text().length > 0 &&
-        $(tRows.find('tr')[6]).text().length > 0 && 
-        $(tRows.find('tr')[7]).text().length > 0 &&
-        $(tRows.find('tr')[8]).text().length > 0 && 
-        $(tRows.find('tr')[9]).text().length > 0
-      ) {
 
-        let data = [
-          { jobTitle: String($(tRows.find('tr')[0]).text()).trim(), jobData: String($(tRows.find('tr')[1]).text()), jobUrl: $(tRows).find('a')[0] ? `http://tecnojobs.pt${(tRows).find('a')[0].attribs.href}` : 'http://tecnojobs.pt' },
-          { jobTitle: String($(tRows.find('tr')[2]).text()).trim(), jobData: String($(tRows.find('tr')[3]).text()), jobUrl: $(tRows).find('a')[1] ? `http://tecnojobs.pt${(tRows).find('a')[1].attribs.href}` : 'http://tecnojobs.pt' },
-          { jobTitle: String($(tRows.find('tr')[4]).text()).trim(), jobData: String($(tRows.find('tr')[5]).text()), jobUrl: $(tRows).find('a')[2] ? `http://tecnojobs.pt${(tRows).find('a')[2].attribs.href}` : 'http://tecnojobs.pt' },
-          { jobTitle: String($(tRows.find('tr')[6]).text()).trim(), jobData: String($(tRows.find('tr')[7]).text()), jobUrl: $(tRows).find('a')[3] ? `http://tecnojobs.pt${(tRows).find('a')[3].attribs.href}` : 'http://tecnojobs.pt' },
-          { jobTitle: String($(tRows.find('tr')[8]).text()).trim(), jobData: String($(tRows.find('tr')[9]).text()), jobUrl: $(tRows).find('a')[4] ? `http://tecnojobs.pt${(tRows).find('a')[4].attribs.href}` : 'http://tecnojobs.pt' },
-          { jobTitle: String($(tRows.find('tr')[10]).text()).trim(), jobData: String($(tRows.find('tr')[11]).text()), jobUrl: $(tRows).find('a')[5] ? `http://tecnojobs.pt${(tRows).find('a')[5].attribs.href}` : 'http://tecnojobs.pt' },
-          { jobTitle: String($(tRows.find('tr')[12]).text()).trim(), jobData: String($(tRows.find('tr')[13]).text()), jobUrl: $(tRows).find('a')[6] ? `http://tecnojobs.pt${(tRows).find('a')[6].attribs.href}` : 'http://tecnojobs.pt' },
-          { jobTitle: String($(tRows.find('tr')[14]).text()).trim(), jobData: String($(tRows.find('tr')[15]).text()), jobUrl: $(tRows).find('a')[7] ? `http://tecnojobs.pt${(tRows).find('a')[7].attribs.href}` : 'http://tecnojobs.pt' },
-          { jobTitle: String($(tRows.find('tr')[16]).text()).trim(), jobData: String($(tRows.find('tr')[17]).text()), jobUrl: $(tRows).find('a')[8] ? `http://tecnojobs.pt${(tRows).find('a')[8].attribs.href}` : 'http://tecnojobs.pt' },
-          { jobTitle: String($(tRows.find('tr')[18]).text()).trim(), jobData: String($(tRows.find('tr')[19]).text()), jobUrl: $(tRows).find('a')[9] ? `http://tecnojobs.pt${(tRows).find('a')[9].attribs.href}` : 'http://tecnojobs.pt' },
-        ]
+      let jobsUrls = $(tRows).find('a')
+      
+      // Array to construct with page data
+      let data = []
 
-        this.setState((prevState, prevProps) => ({
-          ...prevState,
-          data
-        }))
+      for(let i = 0; i < tRows.find('tr').length - 1; i++) {
+
+        if(i % 2 === 0) {
+          
+          let jobTitle = String($(tRows.find('tr')[i]).text()).trim()
+          let jobData = String($(tRows.find('tr')[i + 1]).text()).trim()
+          let jobUrl = 'http://tecnojobs.pt'
+
+          if(i === 0) {
+            jobUrl = `http://tecnojobs.pt${jobsUrls[0].attribs.href}`
+          } else if(i === 2) {
+            jobUrl = `http://tecnojobs.pt${jobsUrls[1].attribs.href}`
+          } else if(i === 4) {
+            jobUrl = `http://tecnojobs.pt${jobsUrls[2].attribs.href}`
+          } else if(i === 6) {
+            jobUrl = `http://tecnojobs.pt${jobsUrls[3].attribs.href}`
+          } else if(i === 8) {
+            jobUrl = `http://tecnojobs.pt${jobsUrls[4].attribs.href}`
+          } else if(i === 10) {
+            jobUrl = `http://tecnojobs.pt${jobsUrls[5].attribs.href}`
+          } else if(i === 12) {
+            jobUrl = `http://tecnojobs.pt${jobsUrls[6].attribs.href}`
+          } else if(i === 14) {
+            jobUrl = `http://tecnojobs.pt${jobsUrls[7].attribs.href}`
+          } else if(i === 16) {
+            jobUrl = `http://tecnojobs.pt${jobsUrls[8].attribs.href}`
+          } else if(i === 18) {
+            jobUrl = `http://tecnojobs.pt${jobsUrls[9].attribs.href}`
+          }
+
+          data.push({
+            jobTitle,
+            jobData,
+            jobUrl
+          })
+        
+        }
       
       }
+
+      this.setState((prevState, prevProps) => ({
+        ...prevState,
+        data
+      }))
     
       this.setState({ loading: false })
 
@@ -149,7 +166,9 @@ class App extends Component {
     }))
 
     let raw = await this.getPage(this.state.pageNum + 1, this.state.city)
-    this.preparePage(raw.text())
+    let html = await raw.text()
+    
+    this.preparePage(html)
 
   }
 
@@ -164,7 +183,9 @@ class App extends Component {
       }))
 
       let raw = await this.getPage(this.state.pageNum - 1, this.state.city)
-      this.preparePage(raw.text())
+      let html = await raw.text()
+      
+      this.preparePage(html)
   
     }
   
@@ -253,21 +274,23 @@ class App extends Component {
                       })
                     }
                   </div>
-                  <div className="buttons-container">
-                    { pageNum > 1 ?
-                      <Fragment>
-                        <button onClick={ this.handlePreviousPage }>Últimos 10</button>
-                        { pageNum <= 75 &&
-                          <button onClick={ this.handleNextPage }>Próximos 10!</button>
-                        }
-                      </Fragment> :
-                      <Fragment>
-                        { pageNum <= 75 &&
-                          <button onClick={ this.handleNextPage }>Próximos 10!</button>
-                        }
-                      </Fragment>
-                    }
-                  </div>
+                  { data.length === 10 && 
+                    <div className="buttons-container">
+                      { pageNum > 1 ?
+                        <Fragment>
+                          <button onClick={ this.handlePreviousPage }>Últimos 10</button>
+                          { pageNum <= 75 &&
+                            <button onClick={ this.handleNextPage }>Próximos 10!</button>
+                          }
+                        </Fragment> :
+                        <Fragment>
+                          { pageNum <= 75 &&
+                            <button onClick={ this.handleNextPage }>Próximos 10!</button>
+                          }
+                        </Fragment>
+                      }
+                    </div>
+                  }
                   <small>Página - { pageNum }</small>
                 </Fragment>
               )
@@ -276,18 +299,21 @@ class App extends Component {
             !error &&
             filtered.length !== 0 &&
             (
+              <Fragment>
                 <div className="offers-container">
-                { filtered.map((element, index) => {
-                    return (
-                        <div className="offer" key={index}>
-                        <h2>{ element.jobTitle }</h2>
-                        <p>{ element.jobData }</p>
-                        <a href={ element.jobUrl } target="_blank" rel="noopener noreferrer">Candidatura!</a>
-                        </div>
-                    )
-                    })
-                }
+                  { filtered.map((element, index) => {
+                      return (
+                          <div className="offer" key={index}>
+                          <h2>{ element.jobTitle }</h2>
+                          <p>{ element.jobData }</p>
+                          <a href={ element.jobUrl } target="_blank" rel="noopener noreferrer">Candidatura!</a>
+                          </div>
+                      )
+                      })
+                  }
                 </div>
+                <small>Página - { pageNum }</small>
+              </Fragment>
             )
           }
           { loading &&
