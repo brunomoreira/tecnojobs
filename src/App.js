@@ -5,8 +5,8 @@ import './App.css'
 function App() {
 
   const config = {
-    dev: 'https://tecnojobs-app.herokuapp.com/',
-    prod: '/'
+    dev: 'https://tecnojobs-app.herokuapp.com/api/',
+    prod: '/api/'
   }
   
   let [ data, setData ] = useState([])
@@ -27,17 +27,16 @@ function App() {
       // Prepare page
       preparePage(html)
 
+      // Load cities
+      loadCities()  
 
     })()
-
-    // Load cities
-    loadCities()  
     
   }, [pageNum])
   
   const loadCities = async () => {
     
-    let raw = await fetch(`${config.prod}cities`)
+    let raw = await fetch(`${config.dev}cities`)
     let { cities } = await raw.json()
     
     setCities(cities)
@@ -103,12 +102,12 @@ function App() {
 
       if(pageNum === 1 || pageNum === 0) {
       
-        let response = await fetch(`${config.prod}api`)
+        let response = await fetch(`${config.dev}`)
         return response
       
       } else {
         
-        let response = await fetch(`${config.prod}api?page=${pageNum}`)
+        let response = await fetch(`${config.dev}?page=${pageNum}`)
         return response
       
       }

@@ -43,7 +43,7 @@ app.get('/api', async (req, res) => {
 
 })
 
-app.get('/cities', async (req, res) => {
+app.get('/api/cities', async (req, res) => {
 
     let raw = await fetch('https://pt.wikipedia.org/wiki/Lista_de_cidades_em_Portugal')
     let html = await raw.text()
