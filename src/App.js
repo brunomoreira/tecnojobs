@@ -42,12 +42,12 @@ class App extends Component {
         
         if(city) {
 
-          let response = await fetch(`${this.config.dev}?CHAVES=${city}`)
+          let response = await fetch(`${this.config.prod}?CHAVES=${city}`)
           return response
 
         } else {
 
-          let response = await fetch(`${this.config.dev}`)
+          let response = await fetch(`${this.config.prod}`)
           return response
         }
       
@@ -55,12 +55,12 @@ class App extends Component {
 
         if(city) {
 
-          let response = await fetch(`${this.config.dev}?page=${pageNum}&CHAVES=${city}`)
+          let response = await fetch(`${this.config.prod}?page=${pageNum}&CHAVES=${city}`)
           return response
 
         } else {
           
-          let response = await fetch(`${this.config.dev}?page=${pageNum}`)
+          let response = await fetch(`${this.config.prod}?page=${pageNum}`)
           return response
         
         }
@@ -75,7 +75,7 @@ class App extends Component {
 
   loadCities = async () => {
     
-    let raw = await fetch(`${this.config.dev}cities`)
+    let raw = await fetch(`${this.config.prod}cities`)
     let { cities } = await raw.json()
 
     this.setState((prevState, prevProps) => ({
