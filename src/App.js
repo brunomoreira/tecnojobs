@@ -1,5 +1,7 @@
 import React, { Component, Fragment } from 'react'
-import cheerio from 'cheerio'
+import preparePage from './utils/preparePage'
+import loadCities from './utils/loadCities'
+import getPage from './utils/getPage'
 import './App.css'
 
 class App extends Component {
@@ -14,146 +16,35 @@ class App extends Component {
     city: null
   }
 
-  componentDidMount() {
-
-    (async () => {
-
-      let raw = await this.getPage(this.state.pageNum, null)
-      let html = await raw.text()
-
-      this.preparePage(html)
-
-      this.loadCities()
-
-    })()
-
-  }
-
   config = {
     dev: 'http://localhost:4000/api/',
     prod: '/api/'
   }
-  
-  getPage = async (pageNum, city) => {
-    
-    try {
 
-      if(pageNum === 1 || pageNum === 0) {
+  componentDidMount() {
+
+    (async () => {
+
+      let { error, html } = await getPage(this.config, this.state.pageNum, null)
+      
+      if(!error && html) {
         
-        if(city) {
-
-          let response = await fetch(`${this.config.prod}?CHAVES=${city}`)
-          return response
-
-        } else {
-
-          let response = await fetch(`${this.config.prod}`)
-          return response
-        }
+        let { error, loading, data } = preparePage(html)
+        let cities = await loadCities(this.config)
+        
+        this.setState((prevState, prevProps) => ({
+          ...prevState,
+          error,
+          loading,
+          data,
+          cities
+        }))
       
       } else {
-
-        if(city) {
-
-          let response = await fetch(`${this.config.prod}?page=${pageNum}&CHAVES=${city}`)
-          return response
-
-        } else {
-          
-          let response = await fetch(`${this.config.prod}?page=${pageNum}`)
-          return response
-        
-        }
-      
+        this.setState({ error })
       }
       
-  
-    } catch(error) {
-      this.setState({ error: true })
-    }
-  }
-
-  loadCities = async () => {
-    
-    let raw = await fetch(`${this.config.prod}cities`)
-    let { cities } = await raw.json()
-
-    this.setState((prevState, prevProps) => ({
-      ...prevState,
-      cities
-    }))
-  
-  }
-
-  preparePage = (page) => {
-    
-    const $ = cheerio.load(page)
-
-    // Check for internal server error in html
-    let headerError = $('#header').find('h1').contents()//[0].data
-    
-    if(headerError.length !== 0) {
-
-      this.setState({ error: true, loading: false })
-
-    } else {
-
-      // If no error was found - parse html and construct object
-      const tRows = $('#AutoNumber2').find('tbody')
-
-      let jobsUrls = $(tRows).find('a')
-      
-      // Array to construct with page data
-      let data = []
-
-      for(let i = 0; i < tRows.find('tr').length - 1; i++) {
-
-        if(i % 2 === 0) {
-          
-          let jobTitle = String($(tRows.find('tr')[i]).text()).trim()
-          let jobData = String($(tRows.find('tr')[i + 1]).text()).trim()
-          let jobUrl = 'http://tecnojobs.pt'
-
-          if(i === 0) {
-            jobUrl = `http://tecnojobs.pt${jobsUrls[0].attribs.href}`
-          } else if(i === 2) {
-            jobUrl = `http://tecnojobs.pt${jobsUrls[1].attribs.href}`
-          } else if(i === 4) {
-            jobUrl = `http://tecnojobs.pt${jobsUrls[2].attribs.href}`
-          } else if(i === 6) {
-            jobUrl = `http://tecnojobs.pt${jobsUrls[3].attribs.href}`
-          } else if(i === 8) {
-            jobUrl = `http://tecnojobs.pt${jobsUrls[4].attribs.href}`
-          } else if(i === 10) {
-            jobUrl = `http://tecnojobs.pt${jobsUrls[5].attribs.href}`
-          } else if(i === 12) {
-            jobUrl = `http://tecnojobs.pt${jobsUrls[6].attribs.href}`
-          } else if(i === 14) {
-            jobUrl = `http://tecnojobs.pt${jobsUrls[7].attribs.href}`
-          } else if(i === 16) {
-            jobUrl = `http://tecnojobs.pt${jobsUrls[8].attribs.href}`
-          } else if(i === 18) {
-            jobUrl = `http://tecnojobs.pt${jobsUrls[9].attribs.href}`
-          }
-
-          data.push({
-            jobTitle,
-            jobData,
-            jobUrl
-          })
-        
-        }
-      
-      }
-
-      this.setState((prevState, prevProps) => ({
-        ...prevState,
-        data
-      }))
-    
-      this.setState({ loading: false })
-
-    }
+    })()
 
   }
 
@@ -165,10 +56,16 @@ class App extends Component {
       pageNum: prevState.pageNum + 1
     }))
 
-    let raw = await this.getPage(this.state.pageNum + 1, this.state.city)
-    let html = await raw.text()
+    let { html } = await getPage(this.config, this.state.pageNum + 1, this.state.city)
     
-    this.preparePage(html)
+    let { error, data, loading } = preparePage(html)
+
+    this.setState((prevState, prevProps) => ({
+      ...prevState,
+      error,
+      data,
+      loading
+    }))
 
   }
 
@@ -182,10 +79,16 @@ class App extends Component {
         pageNum: prevState.pageNum - 1
       }))
 
-      let raw = await this.getPage(this.state.pageNum - 1, this.state.city)
-      let html = await raw.text()
+      let { html } = await getPage(this.config, this.state.pageNum - 1, this.state.city)
       
-      this.preparePage(html)
+      let { error, data, loading } = preparePage(html)
+
+      this.setState((prevState, prevProps) => ({
+        ...prevState,
+        error,
+        data,
+        loading
+      }))
   
     }
   
@@ -228,10 +131,16 @@ class App extends Component {
     
     this.setState({ city, loading: true, pageNum: 1 })
 
-    let raw = await this.getPage(1, city)
-    let html = await raw.text()
+    let { html } = await getPage(this.config, 1, city)
 
-    this.preparePage(html)
+    let { error, data, loading } = preparePage(html)
+
+    this.setState((prevState, prevProps) => ({
+      ...prevState,
+      error,
+      data,
+      loading
+    }))
 
   }
 
