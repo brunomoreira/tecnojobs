@@ -158,7 +158,7 @@ class App extends Component {
             <input type="text" placeholder="filtrar" onChange={ this.handleFilter } />
             { cities.length > 0 && 
               <select onChange={ this.handleCityChange }>
-                  <option value="any">Qualquer</option>
+                  <option value="any">Qualquer Cidade</option>
                 { cities.map(city => {
                     return <option value={city} key={city}>{city}</option>
                 }) }
@@ -174,8 +174,8 @@ class App extends Component {
               (
                 <Fragment>
                   <div className="offers-container">
-                    { data.map((element, index) => {
-                        return <Offer offer={element} key={index} />
+                    { data.map(element => {
+                        return <Offer offer={element} key={element.id} />
                       })
                     }
                   </div>
@@ -206,8 +206,8 @@ class App extends Component {
             (
               <Fragment>
                 <div className="offers-container">
-                  { filtered.map((element, index) => {
-                      return <Offer offer={element} key={index} />  
+                  { filtered.map(element => {
+                      return <Offer offer={element} key={element.id} />  
                     })
                   }
                 </div>

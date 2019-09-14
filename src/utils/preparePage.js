@@ -1,11 +1,12 @@
 import cheerio from 'cheerio'
+import uniqueString from 'unique-string'
 
 export default (page) => {
 
     const $ = cheerio.load(page)
 
     // Check for internal server error in html
-    let headerError = $('#header').find('h1').contents()//[0].data
+    let headerError = $('#header').find('h1').contents()
     
     if(headerError.length !== 0) {
 
@@ -56,6 +57,7 @@ export default (page) => {
           }
 
           data.push({
+            id: uniqueString(),
             jobTitle,
             jobData,
             jobUrl
