@@ -49,50 +49,51 @@ class App extends Component {
 
   }
 
-  handleNextPage = async () => {
-    
-    this.setState((prevState, prevProps) => ({
-      ...prevState,
-      loading: true,
-      pageNum: prevState.pageNum + 1
-    }))
+  handlePageChange = async (mode) => {
 
-    let { html } = await getPage(this.config, this.state.pageNum + 1, this.state.city)
-    
-    let { error, data, loading } = preparePage(html)
-
-    this.setState((prevState, prevProps) => ({
-      ...prevState,
-      error,
-      data,
-      loading
-    }))
-
-  }
-
-  handlePreviousPage = async () => {
-    
-    if(this.state.pageNum > 1) {
-      
+    if(mode === 'next') {
       this.setState((prevState, prevProps) => ({
         ...prevState,
         loading: true,
-        pageNum: prevState.pageNum - 1
+        pageNum: prevState.pageNum + 1
       }))
-
-      let { html } = await getPage(this.config, this.state.pageNum - 1, this.state.city)
+  
+      let { html } = await getPage(this.config, this.state.pageNum + 1, this.state.city)
       
       let { error, data, loading } = preparePage(html)
-
+  
       this.setState((prevState, prevProps) => ({
         ...prevState,
         error,
         data,
         loading
       }))
+      
+    } else {
+
+      if(this.state.pageNum > 1) {
+      
+        this.setState((prevState, prevProps) => ({
+          ...prevState,
+          loading: true,
+          pageNum: prevState.pageNum - 1
+        }))
   
+        let { html } = await getPage(this.config, this.state.pageNum - 1, this.state.city)
+        
+        let { error, data, loading } = preparePage(html)
+  
+        this.setState((prevState, prevProps) => ({
+          ...prevState,
+          error,
+          data,
+          loading
+        }))
+    
+      }
+
     }
-  
+
   }
 
   handleFilter = (e) => {
@@ -182,14 +183,14 @@ class App extends Component {
                     <div className="buttons-container">
                       { pageNum > 1 ?
                         <Fragment>
-                          <button onClick={ this.handlePreviousPage }>Últimos 10</button>
+                          <button onClick={ () => this.handlePageChange('previous') }>Últimos 10</button>
                           { pageNum <= 75 &&
-                            <button onClick={ this.handleNextPage }>Próximos 10!</button>
+                            <button onClick={ () => this.handlePageChange('next') }>Próximos 10!</button>
                           }
                         </Fragment> :
                         <Fragment>
                           { pageNum <= 75 &&
-                            <button onClick={ this.handleNextPage }>Próximos 10!</button>
+                            <button onClick={ () => this.handlePageChange('next') }>Próximos 10!</button>
                           }
                         </Fragment>
                       }
