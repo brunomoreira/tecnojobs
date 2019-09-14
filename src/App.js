@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react'
 import preparePage from './utils/preparePage'
 import loadCities from './utils/loadCities'
 import getPage from './utils/getPage'
+import Offer from './components/offer/Offer'
 import './App.css'
 
 class App extends Component {
@@ -173,13 +174,7 @@ class App extends Component {
                 <Fragment>
                   <div className="offers-container">
                     { data.map((element, index) => {
-                        return (
-                          <div className="offer" key={index}>
-                            <h2>{ element.jobTitle }</h2>
-                            <p>{ element.jobData }</p>
-                            <a href={ element.jobUrl } target="_blank" rel="noopener noreferrer">Candidatura!</a>
-                          </div>
-                        )
+                        return <Offer offer={element} key={index} />
                       })
                     }
                   </div>
@@ -211,14 +206,8 @@ class App extends Component {
               <Fragment>
                 <div className="offers-container">
                   { filtered.map((element, index) => {
-                      return (
-                          <div className="offer" key={index}>
-                          <h2>{ element.jobTitle }</h2>
-                          <p>{ element.jobData }</p>
-                          <a href={ element.jobUrl } target="_blank" rel="noopener noreferrer">Candidatura!</a>
-                          </div>
-                      )
-                      })
+                      return <Offer offer={element} key={index} />  
+                    })
                   }
                 </div>
                 <small>Página - { pageNum }</small>

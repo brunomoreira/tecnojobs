@@ -101,41 +101,6 @@ small {
   grid-gap: 20px;
 }
 
-.offers-container .offer {
-  background: white;
-  padding-bottom: 20px;
-  display: flex;
-  flex-direction: column;
-  border-bottom: 5px solid #cecece;
-  overflow-x: hidden;
-}
-
-.offers-container .offer h2 {
-  margin: 0;
-  padding: 20px 10px;
-  background: darkslateblue;
-  color: white;
-  font-weight: bold;
-  flex-grow: 1;
-  word-break: break-word;
-}
-
-.offers-container .offer p {
-  margin: 20px 0;
-  padding: 10px;
-  font-style: italic;
-  color: #333;
-  flex-grow: 1;
-}
-
-.offers-container .offer a {
-  border-top: 2px solid;
-  text-decoration: none;
-  color: lightcoral;
-  padding: 20px 0 0 0;
-  font-weight: bold;
-}
-
 .buttons-container {
   margin: 50px 0;
 }
