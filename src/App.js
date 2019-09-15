@@ -261,13 +261,13 @@ class App extends Component {
             )
           }
           { loading &&
-              <p className="message">Loading...</p>
+              <p className="message">A Carregar...</p>
           }
           { !loading && data.length === 0 && !error &&
-            <p className="message">No Data!</p>
+            <p className="message">Sem Resultados!</p>
           }
           { !loading && error && 
-            <p className="message">Error Loading Data!</p>
+            <p className="message">Erro ao carregar!</p>
           }
         </section>
       </div>
