@@ -1,12 +1,12 @@
-export default async (config, pageNumber, city) => {
+export default async (config, pageNumber, query) => {
 
     try {
 
         if(pageNumber === 1 || pageNumber === 0) {
           
-          if(city) {
+          if(query) {
   
-            let response = await fetch(`${config.prod}?CHAVES=${city}`)
+            let response = await fetch(`${config.prod}?CHAVES=${query}`)
             let html = await response.text()
             
             return {
@@ -27,9 +27,9 @@ export default async (config, pageNumber, city) => {
         
         } else {
   
-          if(city) {
+          if(query) {
   
-            let response = await fetch(`${config.prod}?page=${pageNumber}&CHAVES=${city}`)
+            let response = await fetch(`${config.prod}?page=${pageNumber}&CHAVES=${query}`)
             let html = await response.text()
             
             return {
