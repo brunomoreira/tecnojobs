@@ -5,8 +5,16 @@
     flex-direction: column;
     border-bottom: 5px solid #cecece;
     overflow-x: hidden;
+    position: relative;
 }
   
+.offer .far {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    color: silver;
+}
+
 .offer h2 {
     margin: 0;
     padding: 20px 10px;

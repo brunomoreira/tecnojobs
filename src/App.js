@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react'
 import preparePage from './utils/preparePage'
 import getPage from './utils/getPage'
 import Offer from './components/offer/Offer'
+import Favorites from './components/favorites/Favorites'
 import './App.css'
 
 class App extends Component {
@@ -270,6 +271,7 @@ class App extends Component {
             <p className="message">Erro ao carregar!</p>
           }
         </section>
+        <Favorites />
       </div>
     );
   }
