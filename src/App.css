@@ -71,6 +71,7 @@ small {
 	margin-right: 20px;
 	border-radius: 3px;
 	cursor: pointer;
+	box-sizing: content-box;
 }
 
 .App-header .show-favorites-btn:disabled {
@@ -140,7 +141,7 @@ small {
 
 @media screen and (max-width: 1024px) {
 	.App-section input {
-		width: 480px;
+		width: 300px;
 	}
 }
 
@@ -153,10 +154,6 @@ small {
 		padding: 0 0 20px 0;
 	}
 
-	.App-header .actions select {
-		margin: 0;
-	}
-
 	.App-header h1 {
 		font-size: 2rem;
 		padding: 0;
@@ -167,22 +164,29 @@ small {
 	}
 }
 
-@media screen and (max-width: 650px) {
+@media screen and (max-width: 780px) {
+	.App-header {
+		padding-bottom: 10px;
+	}
+
 	.App-header .actions {
 		flex-direction: column;
 	}
 
-	.App-header .actions input {
+	.App-header .actions input,
+	.App-header .actions select {
 		margin: 0 0 10px 0;
 		width: 300px;
 	}
 
-	.App-header .actions select {
+	.App-header .actions button {
 		width: 300px;
+		margin-right: 0 !important;
+		padding: 10px;
 	}
 
-	.App-section input {
-		width: 300px;
+	.App-section {
+		margin-top: 240px;
 	}
 }
 
