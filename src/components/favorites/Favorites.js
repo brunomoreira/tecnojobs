@@ -5,7 +5,7 @@ import Offer from '../offer/Offer';
 export default ({ favorites, handleSetFavorite }) => {
 	return (
 		<div className="favorites-container">
-			<h1>Favorites List!</h1>
+			<h1>Favoritos!</h1>
 			{favorites && favorites.length > 0 && (
 				<div className="offers-container">
 					{favorites.map(favorite => {
