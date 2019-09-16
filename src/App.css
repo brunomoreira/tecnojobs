@@ -1,179 +1,195 @@
 .App {
-  text-align: center;
-  position: relative;
+	text-align: center;
+	position: relative;
 }
 
 .App-header {
-  background-color: #282c34;
-  color: white;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  border-bottom: 10px solid #23272f;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+	background-color: #282c34;
+	color: white;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	border-bottom: 10px solid #23272f;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	z-index: 100;
 }
 
 .App-header h1 {
-  padding: 0 0 0 20px;
-  font-size: 3rem;
+	padding: 0 0 0 20px;
+	font-size: 3rem;
 }
 
 small {
-  position: absolute;
-  bottom: 20px;
-  left: 0;
-  color: #5d465a;
-  font-weight: bold;
-  width: 100%;
+	position: absolute;
+	bottom: 20px;
+	left: 0;
+	color: #5d465a;
+	font-weight: bold;
+	width: 100%;
 }
 
 .App-header select {
-  border: none;
-  border-radius: 3px;
-  width: 250px;
-  padding: 10px;
-  font-weight: bold;
-  color: #1d79ec;
-  margin-right: 20px;
-  box-sizing:content-box;
+	border: none;
+	border-radius: 3px;
+	width: 250px;
+	padding: 10px;
+	font-weight: bold;
+	color: #1d79ec;
+	margin-right: 20px;
+	box-sizing: content-box;
 }
 
 .App-header input {
-  border: none;
-  border-radius: 3px;
-  width: 250px;
-  padding: 10px;
-  font-weight: bold;
-  color: #1d79ec;
-  margin-right: 20px;
-  box-sizing:content-box;
+	border: none;
+	border-radius: 3px;
+	width: 250px;
+	padding: 10px;
+	font-weight: bold;
+	color: #1d79ec;
+	margin-right: 20px;
+	box-sizing: content-box;
 }
 
 .App-header input:focus {
-  border: none;
-  outline: none;
+	border: none;
+	outline: none;
 }
 
 .App-header .actions {
-  display: flex;
+	display: flex;
+}
+
+.App-header .show-favorites-btn {
+	border: none;
+	outline: none;
+	background: coral;
+	color: white;
+	font-weight: bold;
+	margin-right: 20px;
+	border-radius: 3px;
+	cursor: pointer;
+}
+
+.App-header .show-favorites-btn:disabled {
+	background: #b18473;
+	color: silver;
+}
+
+.App-header .show-favorites-btn i {
+	margin-right: 5px;
 }
 
 .App-section {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 120px;
-  padding: 50px 0 50px 0;
+	background-color: #282c34;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-top: 120px;
+	padding: 50px 0 50px 0;
+	z-index: 10;
 }
 
 .App-section input {
-  border: none;
-  border-radius: 3px;
-  width: 250px;
-  padding: 10px;
-  font-weight: bold;
-  color: #1d79ec;
-  margin-bottom: 20px;
-  box-sizing:content-box;
+	border: none;
+	border-radius: 3px;
+	width: 250px;
+	padding: 10px;
+	font-weight: bold;
+	color: #1d79ec;
+	margin-bottom: 20px;
+	box-sizing: content-box;
 }
 
 .App-section button {
-  background: white;
-  border: none;
-  padding: 5px 10px;
-  border-bottom: 5px solid silver;
-  border-radius: 3px;
-  color: darkslategray;
-  font-weight: bold;
-  cursor: pointer;
+	background: white;
+	border: none;
+	padding: 5px 10px;
+	border-bottom: 5px solid silver;
+	border-radius: 3px;
+	color: darkslategray;
+	font-weight: bold;
+	cursor: pointer;
 }
 
 .App-section button:last-child {
-  margin-left: 10px;
+	margin-left: 10px;
 }
 
 .App-section .message {
-  color: lightcoral;
-  font-size: 1.5rem;
-  font-weight: bold;
+	color: lightcoral;
+	font-size: 1.5rem;
+	font-weight: bold;
 }
 
 .offers-container {
-  width: 90%;
-  padding: 20px 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 500px));
-  justify-content: center;
-  grid-gap: 20px;
+	width: 100%;
+	padding: 20px 0;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(250px, 500px));
+	justify-content: center;
+	grid-gap: 20px;
 }
 
 .buttons-container {
-  margin: 50px 0;
+	margin: 50px 0;
 }
 
 @media screen and (max-width: 1024px) {
-  .App-section input {
-    width: 480px;
-  }
+	.App-section input {
+		width: 480px;
+	}
 }
- 
+
 @media screen and (max-width: 960px) {
+	.App-header {
+		flex-direction: column;
+	}
 
-  .App-header {
-    flex-direction: column;
-  }
+	.App-header .actions {
+		padding: 0 0 20px 0;
+	}
 
-  .App-header .actions {
-    padding: 0 0 20px 0;
-  }
+	.App-header .actions select {
+		margin: 0;
+	}
 
-  .App-header .actions select {
-    margin: 0;
-  }
+	.App-header h1 {
+		font-size: 2rem;
+		padding: 0;
+	}
 
-  .App-header h1 {
-    font-size: 2rem;
-    padding: 0;
-  }
-
-  .App-section {
-    margin-top: 150px;
-  }
-
+	.App-section {
+		margin-top: 150px;
+	}
 }
 
 @media screen and (max-width: 650px) {
+	.App-header .actions {
+		flex-direction: column;
+	}
 
-  .App-header .actions {
-    flex-direction: column;
-  }
+	.App-header .actions input {
+		margin: 0 0 10px 0;
+		width: 300px;
+	}
 
-  .App-header .actions input {
-    margin: 0 0 10px 0;
-    width: 300px;
-  }
+	.App-header .actions select {
+		width: 300px;
+	}
 
-  .App-header .actions select {
-    width: 300px;
-  }
-
-  .App-section input {
-    width: 300px;
-  }
-
+	.App-section input {
+		width: 300px;
+	}
 }
 
 @media screen and (max-width: 430px) {
-
-  .App-header .actions input,
-  .App-header .actions select,
-  .App-section input {
-    width: 200px;
-  }
-
+	.App-header .actions input,
+	.App-header .actions select,
+	.App-section input {
+		width: 200px;
+	}
 }

@@ -17,7 +17,9 @@ class App extends Component {
       "Alcobaça","Alfena","Almada","Almeirim","Alverca do Ribatejo","Amadora","Amarante","Amora","Anadia","Angra do Heroísmo","Aveiro","Benavente","Barcelos","Barreiro","Beja","Borba","Braga","Bragança","Caldas da Rainha","Câmara de Lobos","Caniço","Cantanhede","Cartaxo","Castelo Branco","Chaves","Coimbra","Costa da Caparica","Covilhã","Elvas","Entroncamento","Ermesinde","Esmoriz","Espinho","Esposende","Estarreja","Estremoz","Évora","Fafe","Faro","Fátima","Felgueiras","Figueira da Foz","Fiães","Freamunde","Funchal","Fundão","Gafanha da Nazaré","Gandra","Gondomar","Gouveia","Guarda","Guimarães","Horta","Ílhavo","Lagoa","Lagos","Lamego","Leiria","Lisboa","Lixa","Loulé","Loures","Lourosa","Macedo de Cavaleiros","Machico","Maia","Mangualde","Marco de Canaveses","Marinha Grande","Matosinhos","Mealhada","Mêda","Miranda do Douro","Mirandela","Montemor-o-Novo","Montijo","Moura","Odivelas","Olhão","Oliveira de Azeméis","Oliveira do Bairro","Oliveira do Hospital","Ourém","Ovar","Paços de Ferreira","Paredes","Penafiel","Peniche","Peso da Régua","Pinhel","Pombal","Ponta Delgada","Ponte de Sor","Portalegre","Portimão","Porto","Póvoa de Santa Iria","Póvoa de Varzim","Praia da Vitória","Quarteira","Queluz","Rebordosa","Reguengos de Monsaraz","Ribeira Grande","Rio Maior","Rio Tinto","Sabugal","Sacavém","Samora Correia","Santa Comba Dão","Santa Cruz","Santa Maria da Feira","Santana","Santarém","Santiago do Cacém","Santo Tirso","São João da Madeira","São Mamede de Infesta","São Pedro do Sul","Lordelo","Seia","Seixal","Senhora da Hora","Serpa","Setúbal","Silves","Sines","Tarouca","Tavira","Tomar","Tondela","Torres Novas","Torres Vedras","Trancoso","Trofa","Valbom","Vale de Cambra","Valença","Valongo","Valpaços","Vendas Novas","Viana do Castelo","Vila Baleira","Vila do Conde","Vila Franca de Xira","Vila Nova de Famalicão","Vila Nova de Foz Côa","Vila Nova de Gaia","Vila Nova de Santo André","Vila Real","Vila Real de Santo António","Viseu"
     ],
     city: null,
-    search: null
+    search: null,
+    favorites: [],
+    showFavorites: false
   }
 
   config = {
@@ -47,6 +49,11 @@ class App extends Component {
       }
       
     })()
+
+    // Get Favorites
+    if (JSON.parse(localStorage.getItem('favorites'))) {
+      this.setState({ favorites: JSON.parse(localStorage.getItem('favorites')) })
+    }
 
   }
 
@@ -191,9 +198,77 @@ class App extends Component {
 
   }
 
+  handleSetFavorite = (offer) => {
+    
+    // find offer in the data array and update it aswell
+    let newData = [...this.state.data]
+    let index = newData.findIndex(el => el.id === offer.id)
+
+    // Check if its already favorited - remove if true
+    if (newData[index] && newData[index].favorited) {
+      newData[index] = {...offer, favorited: false}
+    } else {      
+      newData[index] = {...offer, favorited: true}
+    }
+
+    // Set on localStorage
+    let favorites = JSON.parse(localStorage.getItem('favorites'))
+
+    if(!favorites) {
+
+      // Set favorites on state
+      this.setState((prevState, prevProps) => ({
+        ...prevState,
+        data: newData,
+        favorites: [
+          ...prevState.favorites,
+          { ...offer, favorited: true }
+        ]
+      }))
+
+      localStorage.setItem('favorites', JSON.stringify([{...offer, favorited: true}]))
+    
+    } else {
+      
+      if(offer.favorited) {
+
+        let favorites = this.state.favorites.filter(favorite => offer.id !== favorite.id)
+
+        // Set favorites on state
+        this.setState((prevState, prevProps) => ({
+          ...prevState,
+          data: newData,
+          favorites
+        }))
+
+        localStorage.setItem('favorites', JSON.stringify([...favorites]))
+      
+      } else {
+        // Set favorites on state
+        this.setState((prevState, prevProps) => ({
+          ...prevState,
+          data: newData,
+          favorites: [
+            ...prevState.favorites,
+            { ...offer, favorited: true }
+          ]
+        }))
+      
+        localStorage.setItem('favorites', JSON.stringify([...favorites, {...offer, favorited: true}]))
+      
+      }
+    }
+
+    // Set showFavorites to false if no favorites are found after removal
+    if(this.state.favorites.length === 0 && this.state.showFavorites) {
+      this.setState({ showFavorites: false })
+    }
+
+  }
+
   render() {
 
-    let { pageNum, cities, loading, error, filtered, data } = this.state
+    let { pageNum, cities, loading, error, filtered, data, favorites, showFavorites } = this.state
 
     return (
       <div className="App">
@@ -209,6 +284,14 @@ class App extends Component {
                 }) }
               </select>
             }
+            <button 
+              className="show-favorites-btn" 
+              disabled={ favorites.length === 0 ? 'disabled' : '' } 
+              onClick={ () => this.setState({ showFavorites: !showFavorites })}
+            >
+              <i className={ favorites.length === 0 ? 'far fa-heart' : 'fas fa-heart' }></i>
+               Favoritos
+              </button>
           </div>
         </header>
         <section className="App-section">
@@ -221,7 +304,7 @@ class App extends Component {
                 <Fragment>
                   <div className="offers-container">
                     { data.map(element => {
-                        return <Offer offer={element} key={element.id} />
+                        return <Offer offer={element} key={element.id} handleSetFavorite={this.handleSetFavorite} />
                       })
                     }
                   </div>
@@ -253,7 +336,7 @@ class App extends Component {
               <Fragment>
                 <div className="offers-container">
                   { filtered.map(element => {
-                      return <Offer offer={element} key={element.id} />  
+                      return <Offer offer={element} key={element.id} handleSetFavorite={this.handleSetFavorite} />  
                     })
                   }
                 </div>
@@ -271,7 +354,9 @@ class App extends Component {
             <p className="message">Erro ao carregar!</p>
           }
         </section>
-        <Favorites />
+        { favorites.length > 0 && showFavorites &&
+          <Favorites favorites={favorites} handleSetFavorite={this.handleSetFavorite} />
+        }
       </div>
     );
   }

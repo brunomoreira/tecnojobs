@@ -1,0 +1,15 @@
+.favorites-container {
+	position: absolute;
+	padding: 40px 0;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 1000;
+	background: lavender;
+	height: 100%;
+}
+
+.favorites-container h1 {
+	font-weight: bold;
+	color: cadetblue;
+}
