@@ -260,7 +260,7 @@ class App extends Component {
     }
 
     // Set showFavorites to false if no favorites are found after removal
-    if(this.state.favorites.length === 0 && this.state.showFavorites) {
+    if(this.state.favorites.length === 0) {
       this.setState({ showFavorites: false })
     }
 
@@ -273,7 +273,13 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          <h1>TecnoJobs v2</h1>
+          <div className="header">
+            <h1>TecnoJobs v2</h1>
+            <a href="http://tecnojobs.pt" target="_blank" rel="noopener noreferrer">
+              <i className="fas fa-home"></i>
+              tecnojobs.pt
+            </a>
+          </div>
           <div className="actions">
             <input type="search" placeholder="procurar" onKeyUp={ this.handleSearch } />  
             { cities.length > 0 && 
@@ -284,14 +290,18 @@ class App extends Component {
                 }) }
               </select>
             }
-            <button 
+            <div className="show-favorites">
+              <i className={showFavorites ? 'fas fa-toggle-on' : 'fas fa-toggle-off'} onClick={() => this.setState({ showFavorites: !showFavorites })}></i>
+              <small>Favoritos</small>
+            </div>
+            {/* <button 
               className="show-favorites-btn" 
               disabled={ favorites.length === 0 ? 'disabled' : '' } 
               onClick={ () => this.setState({ showFavorites: !showFavorites })}
             >
               <i className={ favorites.length === 0 ? 'far fa-heart' : 'fas fa-heart' }></i>
                Favoritos
-              </button>
+              </button> */}
           </div>
         </header>
         <section className="App-section">
@@ -354,7 +364,7 @@ class App extends Component {
             <p className="message">Erro ao carregar!</p>
           }
         </section>
-        { favorites.length > 0 && showFavorites &&
+        { showFavorites &&
           <Favorites favorites={favorites} handleSetFavorite={this.handleSetFavorite} />
         }
       </div>

@@ -17,12 +17,26 @@
 	z-index: 100;
 }
 
-.App-header h1 {
-	padding: 0 0 0 20px;
-	font-size: 3rem;
+.App-header .header {
+	padding: 20px;
+	text-align: left;
 }
 
-small {
+.App-header h1 {
+	font-size: 3rem;
+	margin: 0;
+}
+
+.App-header .header a {
+	text-decoration: none;
+	color: aquamarine;
+}
+
+.App-header .header i {
+	margin-right: 5px;
+}
+
+.App-section small {
 	position: absolute;
 	bottom: 20px;
 	left: 0;
@@ -60,27 +74,29 @@ small {
 
 .App-header .actions {
 	display: flex;
+	align-items: center;
 }
 
-.App-header .show-favorites-btn {
-	border: none;
-	outline: none;
-	background: coral;
-	color: white;
-	font-weight: bold;
+.App-header .show-favorites {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
 	margin-right: 20px;
-	border-radius: 3px;
+}
+
+.App-header .show-favorites i {
+	font-size: 2em;
 	cursor: pointer;
-	box-sizing: content-box;
 }
 
-.App-header .show-favorites-btn:disabled {
-	background: #b18473;
-	color: silver;
+.App-header .show-favorites .fa-toggle-off {
+	color: skyblue;
 }
 
-.App-header .show-favorites-btn i {
-	margin-right: 5px;
+.App-header .show-favorites .fa-toggle-on {
+	color: deepskyblue;
 }
 
 .App-section {
@@ -127,16 +143,27 @@ small {
 }
 
 .offers-container {
-	width: 100%;
+	width: 90%;
 	padding: 20px 0;
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(250px, 500px));
 	justify-content: center;
-	grid-gap: 20px;
+	grid-gap: 40px;
 }
 
 .buttons-container {
 	margin: 50px 0;
+}
+
+@media screen and (max-width: 1050px) {
+	.App-header h1 {
+		font-size: 2rem;
+		padding: 0;
+	}
+
+	.App-section {
+		margin-top: 100px;
+	}
 }
 
 @media screen and (max-width: 1024px) {
@@ -154,13 +181,17 @@ small {
 		padding: 0 0 20px 0;
 	}
 
-	.App-header h1 {
-		font-size: 2rem;
-		padding: 0;
+	.App-header .header {
+		text-align: center;
+	}
+
+	.App-header .header a {
+		margin: 20px 0 !important;
+		display: block;
 	}
 
 	.App-section {
-		margin-top: 150px;
+		margin-top: 200px;
 	}
 }
 
@@ -173,6 +204,10 @@ small {
 		flex-direction: column;
 	}
 
+	.App-header .show-favorites {
+		margin-top: 20px;
+	}
+
 	.App-header .actions input,
 	.App-header .actions select {
 		margin: 0 0 10px 0;
@@ -180,13 +215,11 @@ small {
 	}
 
 	.App-header .actions button {
-		width: 300px;
 		margin-right: 0 !important;
-		padding: 10px;
 	}
 
 	.App-section {
-		margin-top: 240px;
+		margin-top: 330px;
 	}
 }
 

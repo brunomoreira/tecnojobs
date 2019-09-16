@@ -19,6 +19,11 @@ export default ({ favorites, handleSetFavorite }) => {
 					})}
 				</div>
 			)}
+			{(!favorites || favorites.length === 0) && (
+				<p>
+					<i className="fas fa-info-circle"></i> Sem Ofertas!
+				</p>
+			)}
 		</div>
 	);
 };
