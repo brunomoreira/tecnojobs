@@ -10,7 +10,7 @@ export default async (config, pageNumber, query) => {
 					html
 				};
 			} else {
-				let response = await fetch(`${config.prod}`);
+				let response = await fetch(`${config.dev}`);
 				let html = await response.text();
 
 				return {
@@ -21,7 +21,7 @@ export default async (config, pageNumber, query) => {
 		} else {
 			if (query) {
 				let response = await fetch(
-					`${config.prod}?page=${pageNumber}&CHAVES=${query}`
+					`${config.dev}?page=${pageNumber}&CHAVES=${query}`
 				);
 				let html = await response.text();
 
@@ -30,7 +30,7 @@ export default async (config, pageNumber, query) => {
 					html
 				};
 			} else {
-				let response = await fetch(`${config.prod}?page=${pageNumber}`);
+				let response = await fetch(`${config.dev}?page=${pageNumber}`);
 				let html = await response.text();
 
 				return {

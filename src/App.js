@@ -19,7 +19,9 @@ class App extends Component {
     city: null,
     search: null,
     favorites: [],
-    showFavorites: false
+    showFavorites: false,
+    showActions: window.innerWidth > 780 ? true : false,
+    showSearch: window.innerWidth <= 780 ? true : false
   }
 
   config = {
@@ -54,6 +56,18 @@ class App extends Component {
     if (JSON.parse(localStorage.getItem('favorites'))) {
       this.setState({ favorites: JSON.parse(localStorage.getItem('favorites')) })
     }
+
+    window.addEventListener('resize', (e) => {
+      
+      let innerWidth = e.currentTarget.innerWidth
+
+      if(innerWidth <= 780) {
+        this.setState({ showActions: false, showSearch: true })
+      } else {
+        this.setState({ showActions: true, showSearch: false })
+      }
+
+    })
 
   }
 
@@ -268,7 +282,7 @@ class App extends Component {
 
   render() {
 
-    let { pageNum, cities, loading, error, filtered, data, favorites, showFavorites } = this.state
+    let { pageNum, cities, loading, error, filtered, data, favorites, showFavorites, showActions, showSearch } = this.state
 
     return (
       <div className="App">
@@ -276,33 +290,30 @@ class App extends Component {
           <div className="header">
             <h1>TecnoJobs v2</h1>
             <a href="http://tecnojobs.pt" target="_blank" rel="noopener noreferrer">
-              <i className="fas fa-home"></i>
+              <i className="fas fa-home" style={{ marginRight: '5px' }}></i>
               tecnojobs.pt
             </a>
-          </div>
-          <div className="actions">
-            <input type="search" placeholder="procurar" onKeyUp={ this.handleSearch } />  
-            { cities.length > 0 && 
-              <select onChange={ this.handleCityChange }>
-                  <option value="any">Qualquer Cidade</option>
-                { cities.map(city => {
-                    return <option value={city} key={city}>{city}</option>
-                }) }
-              </select>
+            { showSearch && 
+              <i className="fas fa-search" style={{ fontSize: '1.5em' }} onClick={ () => this.setState({ showActions: !showActions }) }></i>
             }
-            <div className="show-favorites">
-              <i className={showFavorites ? 'fas fa-toggle-on' : 'fas fa-toggle-off'} onClick={() => this.setState({ showFavorites: !showFavorites })}></i>
-              <small>Favoritos</small>
-            </div>
-            {/* <button 
-              className="show-favorites-btn" 
-              disabled={ favorites.length === 0 ? 'disabled' : '' } 
-              onClick={ () => this.setState({ showFavorites: !showFavorites })}
-            >
-              <i className={ favorites.length === 0 ? 'far fa-heart' : 'fas fa-heart' }></i>
-               Favoritos
-              </button> */}
           </div>
+          { showActions && 
+            <div className="actions">
+              <input type="search" placeholder="procurar" onKeyUp={ this.handleSearch } />  
+              { cities.length > 0 && 
+                <select onChange={ this.handleCityChange }>
+                    <option value="any">Qualquer Cidade</option>
+                  { cities.map(city => {
+                      return <option value={city} key={city}>{city}</option>
+                  }) }
+                </select>
+              }
+              <div className="show-favorites">
+                <i className={showFavorites ? 'fas fa-toggle-on' : 'fas fa-toggle-off'} onClick={() => this.setState({ showFavorites: !showFavorites, showActions: window.innerWidth > 780 ? true : false })}></i>
+                <small>Favoritos</small>
+              </div>
+            </div>
+          }
         </header>
         <section className="App-section">
           <input type="text" placeholder="filtrar" onChange={ this.handleFilter } />

@@ -1,6 +1,6 @@
 .favorites-container {
 	position: absolute;
-	padding: 40px 0;
+	padding: 150px 0 50px 0;
 	top: 0;
 	left: 0;
 	width: 100%;
@@ -20,4 +20,10 @@
 .favorites-container p {
 	color: darkslateblue;
 	font-style: italic;
+}
+
+@media screen and (max-width: 960px) {
+	.favorites-container {
+		padding-top: 220px;
+	}
 }
